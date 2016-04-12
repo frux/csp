@@ -29,6 +29,6 @@
     "should": "^8.3.0"
   },
   "dependencies": {
-    "csp-header": "^0.0.2"
+    "csp-header": "^0.0.3"
   }
 }
