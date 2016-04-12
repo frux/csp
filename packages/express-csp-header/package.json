@@ -1,0 +1,31 @@
+{
+  "name": "express-csp",
+  "version": "0.0.1",
+  "description": "Content-Security-Policy middleware for Express",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frux/express-csp.git"
+  },
+  "keywords": [
+    "csp",
+    "content-security-policy",
+    "express"
+  ],
+  "author": "frux",
+  "license": "WTFPL",
+  "bugs": {
+    "url": "https://github.com/frux/express-csp/issues"
+  },
+  "homepage": "https://github.com/frux/express-csp#readme",
+  "devDependencies": {
+    "mocha": "^2.4.5",
+    "should": "^8.3.0"
+  }
+}
