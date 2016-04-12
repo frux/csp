@@ -2,12 +2,12 @@ var cspHeader = require('csp-header');
 var crypto = require('crypto');
 
 function expressCsp(policies, reportUri){
-	var cspString = cspHeader({
-		policies: policies,
-		'report-uri': reportUri
-	});
-
 	return function(req, res, next){
+		var cspString = cspHeader({
+			policies: policies,
+			'report-uri': (typeof reportUri === 'function' ? reportUri(req, res) : reportUri)
+		});
+
 		if(cspString){
 			if(cspString.indexOf(expressCsp.NONCE) > -1){
 				req.nonce = crypto.randomBytes(16).toString('base64');

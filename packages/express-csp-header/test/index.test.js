@@ -32,12 +32,22 @@ describe('General', function(){
 		actual.req.nonce.should.be.type('string');
 	});
 
-	it('should adds report-uri param', function(){
+	it('should adds report-uri param as string', function(){
 		var actual = mockApp.use(expressCsp({
 			'script-src': [ expressCsp.SELF ]
 		}, 'https://cspreport.com'));
 
 		/report\-uri https\:\/\/cspreport\.com\;$/.test(actual.res.headers['Content-Security-Policy']).should.be.ok();
+	});
+
+	it('should adds report-uri param as function', function(){
+		var actual = mockApp.use(expressCsp({
+			'script-src': [ expressCsp.SELF ]
+		}, function(req, res){
+			return 'https://cspreport.com/send?time=' + Number(new Date());
+		}));
+
+		/report\-uri https\:\/\/cspreport\.com\/send\?time\=[0-9]+\;$/.test(actual.res.headers['Content-Security-Policy']).should.be.ok();
 	});
 });
 
