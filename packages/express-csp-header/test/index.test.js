@@ -52,5 +52,6 @@ describe('General', function(){
 });
 
 console.log(mockApp.use(expressCsp({
-	'script-src': [ expressCsp.NONCE ]
+	'script-src': [ expressCsp.NONCE ],
+	'style-src': [ expressCsp.NONCE ]
 })).res.headers);
