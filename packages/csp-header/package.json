@@ -21,9 +21,7 @@
   "directories": {
     "test": "test"
   },
-  "dependencies": {
-    "should": "^8.3.0"
-  },
+  "dependencies": {},
   "repository": {
     "type": "git",
     "url": "git+https://github.com/frux/csp-header.git"
