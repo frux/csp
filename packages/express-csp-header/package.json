@@ -1,5 +1,5 @@
 {
-  "name": "express-csp",
+  "name": "express-csp-header",
   "version": "0.0.1",
   "description": "Content-Security-Policy middleware for Express",
   "main": "index.js",
@@ -27,5 +27,8 @@
   "devDependencies": {
     "mocha": "^2.4.5",
     "should": "^8.3.0"
+  },
+  "dependencies": {
+    "csp-header": "^0.0.2"
   }
 }
