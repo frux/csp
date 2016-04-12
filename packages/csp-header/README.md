@@ -21,5 +21,5 @@ csp({
   'report-uri': 'https://cspreport.com/send'
 });
 
-// result: "script-src 'self' 'unsafe-inline' 'unsafe-eval' nonce-gg3g43#$g32gqewgaAEGeag2@#GFQ#g== example.com; style-src 'self' mystyle.net; report-uri https://cspreport.com/send;"
+// result: "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'nonce-gg3g43#$g32gqewgaAEGeag2@#GFQ#g==' example.com; style-src 'self' mystyle.net; report-uri https://cspreport.com/send;"
 ```
