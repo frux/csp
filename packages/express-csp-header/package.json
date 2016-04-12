@@ -1,6 +1,6 @@
 {
   "name": "express-csp-header",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Content-Security-Policy middleware for Express",
   "main": "index.js",
   "directories": {
