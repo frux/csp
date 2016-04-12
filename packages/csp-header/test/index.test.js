@@ -34,7 +34,7 @@ describe('Input params', function(){
 
 describe('Utils', function(){
 	it('should build nonce param', function(){
-		csp.nonce('vg3eer#E4gEbw34gwq3fgqGQWBWQh').should.be.equal('nonce-vg3eer#E4gEbw34gwq3fgqGQWBWQh');
+		csp.nonce('vg3eer#E4gEbw34gwq3fgqGQWBWQh').should.be.equal('\'nonce-vg3eer#E4gEbw34gwq3fgqGQWBWQh\'');
 	});
 
 	describe('Constants', function(){

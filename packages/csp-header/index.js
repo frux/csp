@@ -63,7 +63,7 @@ function csp(params){
  * @returns {string} Nonce param
  */
 csp.nonce = function(nonceId){
-	return 'nonce-' + nonceId;
+	return '\'nonce-' + nonceId + '\'';
 };
 
 csp.SELF = '\'self\'';
