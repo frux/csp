@@ -1,0 +1,35 @@
+{
+  "name": "csp-header",
+  "version": "0.0.1",
+  "description": "Content-Security-Policy header generator",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "keywords": [
+    "csp",
+    "content-security-policy",
+    "security",
+    "policy"
+  ],
+  "author": "frux",
+  "license": "WTFPL",
+  "devDependencies": {
+    "mocha": "^2.4.5",
+    "should": "^8.3.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "should": "^8.3.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/frux/csp-header.git"
+  },
+  "bugs": {
+    "url": "https://github.com/frux/csp-header/issues"
+  },
+  "homepage": "https://github.com/frux/csp-header#readme"
+}
