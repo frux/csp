@@ -5,12 +5,10 @@
 ```js
 var csp = require('express-csp');
 app.use(csp({
-    policies: {
-        'default-src': [ csp.SELF ],
-        'script-src': [ csp.SELF, csp.INLINE, 'somehost.com' ],
-        'style-src': [ csp.SELF, 'mystyles.net' ],
-        'img-src': [ 'data:', 'images.com' ]
-    }
+    'default-src': [ csp.SELF ],
+    'script-src': [ csp.SELF, csp.INLINE, 'somehost.com' ],
+    'style-src': [ csp.SELF, 'mystyles.net' ],
+    'img-src': [ 'data:', 'images.com' ]
 }));
 
 // express will send header "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' somehost.com; style-src 'self' mystyles.net; img-src data: images.com; report-uri https://cspreport.com/send;'
@@ -22,9 +20,7 @@ If you want to use nonce parameter you should use NONCE constant. Nonce key will
 
 ```js
 app.use(csp({
-    policies: {
-        'script-src': [ csp.NONCE ]
-    }
+    'script-src': [ csp.NONCE ]
 }));
 // express will send header with a random nonce key "Content-Security-Policy: script-src 'nonce-pSQ9TwXOMI+HezKshnuRaw==';"
 
@@ -39,9 +35,7 @@ If you want to specify ``report-uri`` param you should pass it as the second arg
 
 ```js
 app.use(csp({
-    policies: {
-        'script-src': [ csp.SELF ]
-    }
+    'script-src': [ csp.SELF ]
 }, 'https://cspreport.com/send'));
 // express will send header with a random nonce key "Content-Security-Policy: script-src 'self'; report-uri https://cspreport.com/send;"
 ```
