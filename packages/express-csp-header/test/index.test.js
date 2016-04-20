@@ -2,7 +2,9 @@ var should = require('should'),
 	expressCsp = require('../'),
 	mockApp = {
 		use: function(middleware){
-			var req = {},
+			var req = {
+					hostname: 'example.com'
+				},
 				res = {
 					headers: {},
 					set: function(headerName, headerVal){
@@ -48,6 +50,14 @@ describe('General', function(){
 		}));
 
 		/report\-uri https\:\/\/cspreport\.com\/send\?time\=[0-9]+\;$/.test(actual.res.headers['Content-Security-Policy']).should.be.ok();
+	});
+
+	it('should replace tld', function(){
+		var actual = mockApp.use(expressCsp({
+			'script-src': [ 'myhost.' + expressCsp.TLD ]
+		}));
+
+		actual.res.headers['Content-Security-Policy'].should.be.equal('script-src myhost.com;');
 	});
 });
 
