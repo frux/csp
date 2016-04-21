@@ -1,11 +1,9 @@
 var should = require('should'),
 	expressCsp = require('../'),
 	mockApp = {
-		use: function(middleware){
-			var req = {
-					hostname: 'example.com'
-				},
-				res = {
+		use: function(middleware, req, res){
+			var req = req || {},
+				res = res || {
 					headers: {},
 					set: function(headerName, headerVal){
 						this.headers[headerName] = headerVal;
@@ -55,9 +53,21 @@ describe('General', function(){
 	it('should replace tld', function(){
 		var actual = mockApp.use(expressCsp({
 			'script-src': [ 'myhost.' + expressCsp.TLD ]
-		}));
+		}), {
+			hostname: 'example.com'
+		});
 
 		actual.res.headers['Content-Security-Policy'].should.be.equal('script-src myhost.com;');
+	});
+
+	it('shouldn\'t replace tld if tld is not defined', function(){
+		var actual = mockApp.use(expressCsp({
+			'script-src': [ 'myhost.' + expressCsp.TLD ]
+		}), {
+			hostname: 'localhost'
+		});
+
+		actual.res.headers['Content-Security-Policy'].should.be.equal('script-src myhost.%tld%;');
 	});
 });
 
