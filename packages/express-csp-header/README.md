@@ -29,6 +29,19 @@ app.use(function(req, res){
 })
 ```
 
+### Auto tld
+
+If you have more than one tlds you may want to keep current tld in your security policy. And you able to do this by replacing tld by TLD constant:
+
+```js
+app.use(csp({
+    'script-src': [ `mystatic.${CSP.TLD}` ]
+}));
+// for myhost.com it will send: "Content-Security-Policy: script-src mystatic.com;"
+// for myhost.net it will send: "Content-Security-Policy: script-src mystatic.net;"
+// etc
+```
+
 ### report-uri parameter
 
 If you want to specify ``report-uri`` param you should pass it as the second argument:
@@ -40,7 +53,7 @@ app.use(csp({
 // express will send header with a random nonce key "Content-Security-Policy: script-src 'self'; report-uri https://cspreport.com/send;"
 ```
 
-If you want to pass some params to the report uri just pass function instaed of string:
+If you want to pass some params to the report uri just pass function instead of string:
 
 ```js
 app.use(csp({
@@ -50,3 +63,7 @@ app.use(csp({
 }));
 // express will send header with a random nonce key "Content-Security-Policy: script-src 'self'; report-uri https://cspreport.com/send?time=1460467355592;"
 ```
+
+### Release notes:
+#### v0.1.0:
+ * Dynamic tld (thanks to @msmirnov)
