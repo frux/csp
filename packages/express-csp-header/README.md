@@ -66,4 +66,4 @@ app.use(csp({
 
 ### Release notes:
 #### v0.1.0:
- * Dynamic tld (thanks to @msmirnov)
+ * Dynamic tld (thanks to [@msmirnov](https://github.com/msmirnov))
