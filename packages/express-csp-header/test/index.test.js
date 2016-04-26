@@ -17,16 +17,20 @@ var should = require('should'),
 describe('General', function(){
 	it('should sets CSP header', function(){
 		var actual = mockApp.use(expressCsp({
-			'script-src': [ expressCsp.SELF, 'myhost.com' ],
-			'style-src': [ expressCsp.SELF, expressCsp.INLINE ]
+			policies: {
+				'script-src': [ expressCsp.SELF, 'myhost.com' ],
+				'style-src': [ expressCsp.SELF, expressCsp.INLINE ]
+			}
 		}));
 		actual.res.headers['Content-Security-Policy'].should.be.equal('script-src \'self\' myhost.com; style-src \'self\' \'unsafe-inline\';');
 	});
 
 	it('should generates nonce key', function(){
 		var actual = mockApp.use(expressCsp({
-			'script-src': [ expressCsp.NONCE ]
-		}));
+				policies: {
+					'script-src': [ expressCsp.NONCE ]
+				}
+			}));
 
 		/^script\-src \'nonce\-.+\'\;/.test(actual.res.headers['Content-Security-Policy']).should.be.ok();
 		actual.req.nonce.should.be.type('string');
@@ -34,17 +38,21 @@ describe('General', function(){
 
 	it('should adds report-uri param as string', function(){
 		var actual = mockApp.use(expressCsp({
-			'script-src': [ expressCsp.SELF ]
-		}, 'https://cspreport.com'));
+			policies: { 'script-src': [ expressCsp.SELF ] },
+			reportUri: 'https://cspreport.com'
+		}));
 
 		/report\-uri https\:\/\/cspreport\.com\;$/.test(actual.res.headers['Content-Security-Policy']).should.be.ok();
 	});
 
 	it('should adds report-uri param as function', function(){
 		var actual = mockApp.use(expressCsp({
-			'script-src': [ expressCsp.SELF ]
-		}, function(req, res){
-			return 'https://cspreport.com/send?time=' + Number(new Date());
+			policies: {
+				'script-src': [ expressCsp.SELF ]
+			},
+			reportUri: function(req, res){
+				return 'https://cspreport.com/send?time=' + Number(new Date());
+			}
 		}));
 
 		/report\-uri https\:\/\/cspreport\.com\/send\?time\=[0-9]+\;$/.test(actual.res.headers['Content-Security-Policy']).should.be.ok();
@@ -52,7 +60,9 @@ describe('General', function(){
 
 	it('should replace tld', function(){
 		var actual = mockApp.use(expressCsp({
-			'script-src': [ 'myhost.' + expressCsp.TLD ]
+			policies: {
+				'script-src': [ 'myhost.' + expressCsp.TLD ]
+			}
 		}), {
 			hostname: 'example.com'
 		});
@@ -62,16 +72,24 @@ describe('General', function(){
 
 	it('shouldn\'t replace tld if tld is not defined', function(){
 		var actual = mockApp.use(expressCsp({
-			'script-src': [ 'myhost.' + expressCsp.TLD ]
+			policies: {
+				'script-src': [ 'myhost.' + expressCsp.TLD ]
+			}
 		}), {
 			hostname: 'localhost'
 		});
 
 		actual.res.headers['Content-Security-Policy'].should.be.equal('script-src myhost.%tld%;');
 	});
-});
 
-console.log(mockApp.use(expressCsp({
-	'script-src': [ expressCsp.NONCE ],
-	'style-src': [ expressCsp.NONCE ]
-})).res.headers);
+	it('should supports Report-Only mode', function(){
+		var actual = mockApp.use(expressCsp({
+			policies: {
+				'script-src': [ 'myhost.com' ]
+			},
+			reportOnly: true
+		}));
+
+		actual.res.headers['Content-Security-Policy-Report-Only'].should.be.equal('script-src myhost.com;');
+	});
+});

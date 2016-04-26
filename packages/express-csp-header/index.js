@@ -1,8 +1,19 @@
 var cspHeader = require('csp-header');
 var crypto = require('crypto');
 var parseDomain = require('parse-domain');
+var CSP_HEADER_NAME = 'Content-Security-Policy';
+var CSP_REPORT_ONLY = '-Report-Only';
 
-function expressCsp(policies, reportUri){
+function expressCsp(params){
+	var policies,
+		reportUri,
+		reportOnly;
+
+	params = params || {};
+	policies = params.policies;
+	reportUri = params.reportUri;
+	reportOnly = Boolean(params.reportOnly);
+
 	return function(req, res, next){
 		var cspString = cspHeader({
 			policies: policies,
@@ -21,7 +32,7 @@ function expressCsp(policies, reportUri){
 					cspString = cspString.replace(new RegExp(expressCsp.TLD, 'g'), tld);
 				}
 			}
-			res.set('Content-Security-Policy', cspString);
+			res.set(CSP_HEADER_NAME + (reportOnly ? CSP_REPORT_ONLY : ''), cspString);
 			next();
 		}
 	}
