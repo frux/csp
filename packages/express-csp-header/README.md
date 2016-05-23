@@ -48,6 +48,26 @@ app.use(csp({
 // etc
 ```
 
+### Policy extending
+
+Sometimes you need to extend existing policies. You can do it by `extend` param:
+
+```js
+var defaultPolicies = {
+    'script-src': [ 'mydefaulthost.com' ]
+};
+
+app.use(csp({
+    policies: defaultPolicies,
+    extend: {
+        'script-src': [ 'myadditionalhost.com' ],
+        'style-src': [ 'mystyles.com' ]
+    }
+}));
+
+// result header: 'Content-Security-Policy: script-src mydefaulthost.com myadditionalhost.com; style-src: mystyles.com;'
+```
+
 ### Content-Security-Policy-Report-Only mode
 
 To switch on Report-Only mode just specify `reportOnly` param:
@@ -91,6 +111,9 @@ app.use(csp({
 ```
 
 ### Release notes:
+
+#### v1.1.0
+ * Policies extending
 
 #### v1.0.0:
 
