@@ -11,8 +11,13 @@ function expressCsp(params){
 
 	params = params || {};
 	policies = params.policies;
+	extend = params.extend;
 	reportUri = params.reportUri;
 	reportOnly = Boolean(params.reportOnly);
+
+	if(typeof extend === 'object'){
+		policies = extendPolicies(policies, extend);
+	}
 
 	return function(req, res, next){
 		var cspString = cspHeader({
@@ -36,6 +41,28 @@ function expressCsp(params){
 			next();
 		}
 	}
+}
+
+function extendPolicies(original, extension){
+	var extended = Object.assign(original);
+	Object.keys(extension).forEach(function(policyName){
+		var extPolicy = extension[policyName],
+			origPolicy = original[policyName];
+
+		if(!(extPolicy instanceof Array)){
+			throw new Error('');
+		}
+		if(typeof origPolicy !== 'undefined'){
+			extPolicy.forEach(function(rule){
+				if(typeof rule === 'string' && origPolicy.indexOf(rule) === -1){
+					extended[policyName].push(rule);
+				}
+			});
+		}else{
+			extended[policyName] = extPolicy;
+		}
+	});
+	return extended;
 }
 
 expressCsp.SELF = cspHeader.SELF;
