@@ -1,19 +1,28 @@
 var allowedPolicies = [
 	'base-uri',
-	'default-src',
-	'script-src',
-	'style-src',
-	'img-src',
-	'frame-src',
-	'script-src',
+	'block-all-mixed-content',
 	'child-src',
 	'connect-src',
-	'object-src',
-	'media-src',
+	'default-src',
+	'disown-opener',
 	'font-src',
 	'form-action',
 	'frame-ancestors',
-	'plugin-types'
+	'frame-src',
+	'img-src',
+	'manifest-src',
+	'media-src',
+	'object-src',
+	'plugin-types',
+	'referrer',
+	'reflected-xss',
+	'report-uri',
+	'sandbox',
+	'script-src',
+	'strict-dynamic',
+	'style-src',
+	'upgrade-insecure-requests',
+	'worker-src'
 ];
 
 /**
@@ -23,6 +32,9 @@ var allowedPolicies = [
  */
 function buildCSPString(policies, reportUri){
 	var cspString = Object.keys(policies).map(function(policyName){
+		if(policies[policyName] === true || policies[policyName].length === 0){
+			return policyName;
+		}
 		return policyName + ' ' + policies[policyName].join(' ');
 	}).join('; ') + ';';
 
@@ -49,7 +61,9 @@ function csp(params){
 	// filter disallowed policies
 	policies = Object.keys(params.policies).reduce(function(policies, policyName){
 		if(allowedPolicies.indexOf(policyName) > -1){
-			policies[policyName] = params.policies[policyName];
+			if(params.policies[policyName] !== false){
+				policies[policyName] = params.policies[policyName];
+			}
 		}
 		return policies;
 	}, {});
@@ -66,6 +80,7 @@ csp.nonce = function(nonceId){
 	return '\'nonce-' + nonceId + '\'';
 };
 
+csp.NONE = '\'none\'';
 csp.SELF = '\'self\'';
 csp.INLINE = '\'unsafe-inline\'';
 csp.EVAL = '\'unsafe-eval\'';

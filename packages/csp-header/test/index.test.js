@@ -30,6 +30,29 @@ describe('Input params', function(){
 			'report-uri': 'https://test.com/cspreport'
 		}).should.be.equal('script-src \'self\'; report-uri https://test.com/cspreport;');
 	});
+
+	it('should support valueless directives', function(){
+		csp({
+			policies: {
+				'script-src': [ 'test.com' ],
+				'block-all-mixed-content': true
+			}
+		}).should.be.equal('script-src test.com; block-all-mixed-content;');
+
+		csp({
+			policies: {
+				'script-src': [ 'test.com' ],
+				'block-all-mixed-content': []
+			}
+		}).should.be.equal('script-src test.com; block-all-mixed-content;');
+
+		csp({
+			policies: {
+				'script-src': [ 'test.com' ],
+				'block-all-mixed-content': ''
+			}
+		}).should.be.equal('script-src test.com; block-all-mixed-content;');
+	});
 });
 
 describe('Utils', function(){
@@ -46,6 +69,9 @@ describe('Utils', function(){
 		});
 		it('should contains \'unsafe-eval\'', function(){
 			csp.EVAL.should.be.equal('\'unsafe-eval\'');
+		});
+		it('should contains \'none\'', function(){
+			csp.NONE.should.be.equal('\'none\'');
 		});
 	});
 });
