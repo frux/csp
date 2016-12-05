@@ -68,6 +68,7 @@ function extendPolicies(original, extension){
 expressCsp.SELF = cspHeader.SELF;
 expressCsp.INLINE = cspHeader.INLINE;
 expressCsp.EVAL = cspHeader.EVAL;
+expressCsp.NONE = cspHeader.NONE;
 expressCsp.NONCE = '%nonce%';
 expressCsp.TLD = '%tld%';
 

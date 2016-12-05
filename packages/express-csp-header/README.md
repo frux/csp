@@ -9,11 +9,13 @@ app.use(csp({
         'default-src': [ csp.SELF ],
         'script-src': [ csp.SELF, csp.INLINE, 'somehost.com' ],
         'style-src': [ csp.SELF, 'mystyles.net' ],
-        'img-src': [ 'data:', 'images.com' ]
+        'img-src': [ 'data:', 'images.com' ],
+        'worker-src': [ csp.NONE ],
+        'block-all-mixed-content': true
     }
 }));
 
-// express will send header "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' somehost.com; style-src 'self' mystyles.net; img-src data: images.com; report-uri https://cspreport.com/send;'
+// express will send header "Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' somehost.com; style-src 'self' mystyles.net; img-src data: images.com; workers-src 'none'; block-all-mixed-content; report-uri https://cspreport.com/send;'
 ```
 
 ### nonce parameter

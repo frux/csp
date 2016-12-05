@@ -18,11 +18,15 @@ describe('General', function(){
 	it('should sets CSP header', function(){
 		var actual = mockApp.use(expressCsp({
 			policies: {
-				'script-src': [ expressCsp.SELF, 'myhost.com' ],
-				'style-src': [ expressCsp.SELF, expressCsp.INLINE ]
+				'default-src': [ expressCsp.SELF ],
+				'script-src': [ expressCsp.SELF, expressCsp.INLINE, 'somehost.com' ],
+				'style-src': [ expressCsp.SELF, 'mystyles.net' ],
+				'img-src': [ 'data:', 'images.com' ],
+				'worker-src': [ expressCsp.NONE ],
+				'block-all-mixed-content': true
 			}
 		}));
-		actual.res.headers['Content-Security-Policy'].should.be.equal('script-src \'self\' myhost.com; style-src \'self\' \'unsafe-inline\';');
+		actual.res.headers['Content-Security-Policy'].should.be.equal("default-src 'self'; script-src 'self' 'unsafe-inline' somehost.com; style-src 'self' mystyles.net; img-src data: images.com; worker-src 'none'; block-all-mixed-content;");
 	});
 
 	it('should generates nonce key', function(){
