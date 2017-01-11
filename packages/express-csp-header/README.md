@@ -3,7 +3,7 @@
 ## Usage
 
 ```js
-var csp = require('express-csp');
+var csp = require('express-csp-header');
 app.use(csp({
     policies: {
         'default-src': [ csp.SELF ],
