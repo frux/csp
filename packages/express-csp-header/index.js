@@ -6,6 +6,7 @@ var CSP_REPORT_ONLY = '-Report-Only';
 
 function expressCsp(params){
 	var policies,
+		extend,
 		reportUri,
 		reportOnly;
 
