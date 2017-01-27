@@ -114,6 +114,9 @@ app.use(csp({
 
 ### Release notes:
 
+#### v1.1.1
+ * fix leaking to global scope by [@i-akhmadullin](https://github.com/i-akhmadullin)
+
 #### v1.1.0
  * Policies extending
 
