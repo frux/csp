@@ -114,8 +114,11 @@ app.use(csp({
 
 ### Release notes:
 
-#### v1.1.1
+#### v1.2.1
  * fix leaking to global scope by [@i-akhmadullin](https://github.com/i-akhmadullin)
+
+#### v1.2.0
+ * new csp-header with CSP 3
 
 #### v1.1.0
  * Policies extending
