@@ -95,7 +95,7 @@ app.use(csp({
     },
     reportUri: 'https://cspreport.com/send'
 }));
-// express will send header with a random nonce key "Content-Security-Policy: script-src 'self'; report-uri https://cspreport.com/send;"
+// express will send header "Content-Security-Policy: script-src 'self'; report-uri https://cspreport.com/send;"
 ```
 
 If you want to pass some params to the report uri just pass function instead of string:
@@ -109,7 +109,7 @@ app.use(csp({
         return 'https://cspreport.com/send?time=' + Number(new Date());
     }
 }));
-// express will send header with a random nonce key "Content-Security-Policy: script-src 'self'; report-uri https://cspreport.com/send?time=1460467355592;"
+// express will send header "Content-Security-Policy: script-src 'self'; report-uri https://cspreport.com/send?time=1460467355592;"
 ```
 
 ### Release notes:
