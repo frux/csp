@@ -16,8 +16,8 @@ test('Empty policies', t => {
 test('Disallowed policies', t => {
 	const actual = csp({
 		policies: {
-			'script-src': [ 'test.com', csp.SELF ],
-			'foo-bar-src': [ 'foo', 'bar' ]
+			'script-src': ['test.com', csp.SELF],
+			'foo-bar-src': ['foo', 'bar']
 		}
 	});
 	const expected = "script-src test.com 'self';";
@@ -27,10 +27,10 @@ test('Disallowed policies', t => {
 test('report-uri', t => {
 	const actual = csp({
 		policies: {
-			'script-src': [ csp.SELF ]
+			'script-src': [csp.SELF]
 		},
 		'report-uri': 'https://test.com/cspreport'
-	})
+	});
 	const expected = "script-src 'self'; report-uri https://test.com/cspreport;";
 	t.is(actual, expected);
 });
@@ -80,10 +80,10 @@ test('Presets | resolve', t => {
 test('Extend | new rule', t => {
 	const actual = csp({
 		policies: {
-			'script-src': [ 'myhost.com' ]
+			'script-src': ['myhost.com']
 		},
 		extend: {
-			'script-src': [ 'additional.host.com' ]
+			'script-src': ['additional.host.com']
 		}
 	});
 
@@ -93,10 +93,10 @@ test('Extend | new rule', t => {
 test('Extend | duplicating', t => {
 	const actual = csp({
 		policies: {
-			'script-src': [ 'myhost.com' ]
+			'script-src': ['myhost.com']
 		},
 		extend: {
-			'script-src': [ 'myhost.com' ]
+			'script-src': ['myhost.com']
 		}
 	});
 
@@ -106,10 +106,10 @@ test('Extend | duplicating', t => {
 test('Extend | new policy', t => {
 	const actual = csp({
 		policies: {
-			'script-src': [ 'myhost.com' ]
+			'script-src': ['myhost.com']
 		},
 		extend: {
-			'style-src': [ 'newhost.com' ]
+			'style-src': ['newhost.com']
 		}
 	});
 
@@ -118,7 +118,7 @@ test('Extend | new policy', t => {
 
 test('Nonce', t => {
 	const actual = csp.nonce('vg3eer#E4gEbw34gwq3fgqGQWBWQh');
-	const expected = "'nonce-vg3eer#E4gEbw34gwq3fgqGQWBWQh'"
+	const expected = "'nonce-vg3eer#E4gEbw34gwq3fgqGQWBWQh'";
 	t.is(actual, expected);
 });
 

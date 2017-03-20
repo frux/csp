@@ -30,24 +30,24 @@ const allowedPolicies = [
  * @param policies {object} Policies
  * @returns {string}
  */
-function buildCSPString(policies, reportUri){
+function buildCSPString(policies, reportUri) {
 	let cspString = Object.keys(policies).map(policyName => {
-		if(policies[policyName] === true || policies[policyName].length === 0){
+		if (policies[policyName] === true || policies[policyName].length === 0) {
 			return policyName;
 		}
 		return `${policyName} ${policies[policyName].join(' ')}`;
 	}).join('; ');
 
-	if(typeof reportUri === 'string'){
+	if (typeof reportUri === 'string') {
 		cspString += `; report-uri ${reportUri}`;
 	}
 
 	return `${cspString};`;
 }
 
-function csp(params){
+function csp(params) {
 	// params should be an object
-	if(typeof params !== 'object'){
+	if (typeof params !== 'object') {
 		return;
 	}
 
@@ -61,8 +61,8 @@ function csp(params){
 
 	// filter disallowed policies
 	let policies = Object.keys(params.policies).reduce((policies, policyName) => {
-		if(allowedPolicies.indexOf(policyName) > -1){
-			if(params.policies[policyName] !== false){
+		if (allowedPolicies.indexOf(policyName) > -1) {
+			if (params.policies[policyName] !== false) {
 				policies[policyName] = params.policies[policyName];
 			}
 		}
@@ -100,15 +100,14 @@ function resolvePreset(presetName) {
 
 	if (isFullModuleName) {
 		return presetName;
-	} else {
-		return `csp-preset-${presetName}`;
 	}
+	return `csp-preset-${presetName}`;
 }
 
 function requirePreset(presetName) {
 	try {
 		return require(resolvePreset(presetName));
-	} catch(err) {
+	} catch (err) {
 		throw new Error(`CSP preset ${presetName} is not found`);
 	}
 }
@@ -119,7 +118,7 @@ function requirePreset(presetName) {
  * @param {Object} extension Additional policies
  * @returns {Object} Extended policies
  */
-function extendPolicies(original, extension){
+function extendPolicies(original, extension) {
 	const extended = Object.assign(original);
 
 	Object.keys(extension).forEach(policyName => {
@@ -128,9 +127,9 @@ function extendPolicies(original, extension){
 
 		if (origPolicy === undefined) {
 			extended[policyName] = extPolicy;
-		} else if(Array.isArray(extPolicy) && extPolicy.length > 0 && Array.isArray(origPolicy)){
+		} else if (Array.isArray(extPolicy) && extPolicy.length > 0 && Array.isArray(origPolicy)) {
 			extPolicy.forEach(rule => {
-				if(typeof rule === 'string' && origPolicy.indexOf(rule) === -1){
+				if (typeof rule === 'string' && origPolicy.indexOf(rule) === -1) {
 					extended[policyName].push(rule);
 				}
 			});
@@ -147,7 +146,7 @@ function extendPolicies(original, extension){
  * @param nonceId {string} Nonce param id
  * @returns {string} Nonce param
  */
-csp.nonce = function(nonceId){
+csp.nonce = function (nonceId) {
 	return `'nonce-${nonceId}'`;
 };
 
