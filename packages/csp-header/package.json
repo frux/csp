@@ -1,6 +1,6 @@
 {
   "name": "csp-header",
-  "version": "0.0.4",
+  "version": "1.0.0",
   "description": "Content-Security-Policy header generator",
   "main": "index.js",
   "scripts": {
