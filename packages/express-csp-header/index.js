@@ -6,25 +6,19 @@ var CSP_REPORT_ONLY = '-Report-Only';
 
 function expressCsp(params){
 	var policies,
-		extend,
 		reportUri,
 		reportOnly;
 
 	params = params || {};
-	policies = params.policies;
-	extend = params.extend;
-	reportUri = params.reportUri;
-	reportOnly = Boolean(params.reportOnly);
-
-	if(typeof extend === 'object'){
-		policies = extendPolicies(policies, extend);
-	}
 
 	return function(req, res, next){
-		var cspString = cspHeader({
-			policies: policies,
-			'report-uri': (typeof reportUri === 'function' ? reportUri(req, res) : reportUri)
-		});
+		var cspHeaderParams = {
+			policies: params.policies,
+			extend: params.extend,
+			presets: params.presets,
+			'report-uri': (typeof params.reportUri === 'function' ? params.reportUri(req, res) : params.reportUri)
+		}
+		var cspString = cspHeader(cspHeaderParams);
 
 		if(cspString){
 			if(cspString.indexOf(expressCsp.NONCE) > -1){
@@ -38,32 +32,10 @@ function expressCsp(params){
 					cspString = cspString.replace(new RegExp(expressCsp.TLD, 'g'), tld);
 				}
 			}
-			res.set(CSP_HEADER_NAME + (reportOnly ? CSP_REPORT_ONLY : ''), cspString);
+			res.set(CSP_HEADER_NAME + (params.reportOnly ? CSP_REPORT_ONLY : ''), cspString);
 			next();
 		}
 	}
-}
-
-function extendPolicies(original, extension){
-	var extended = Object.assign(original);
-	Object.keys(extension).forEach(function(policyName){
-		var extPolicy = extension[policyName],
-			origPolicy = original[policyName];
-
-		if(!(extPolicy instanceof Array)){
-			throw new Error('');
-		}
-		if(typeof origPolicy !== 'undefined'){
-			extPolicy.forEach(function(rule){
-				if(typeof rule === 'string' && origPolicy.indexOf(rule) === -1){
-					extended[policyName].push(rule);
-				}
-			});
-		}else{
-			extended[policyName] = extPolicy;
-		}
-	});
-	return extended;
 }
 
 expressCsp.SELF = cspHeader.SELF;
