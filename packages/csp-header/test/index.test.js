@@ -64,6 +64,58 @@ test('Valueless directives', t => {
 	t.is(actualEmptyString, expected);
 });
 
+test('Presets | extend', t => {
+	const actual = csp({
+		presets: [require('./fixtures/presets/csp-preset-test')]
+	});
+
+	t.is(actual, 'script-src test.com; style-src test.com;');
+});
+
+test('Presets | resolve', t => {
+	t.is(csp.resolvePreset('csp-preset-test'), 'csp-preset-test');
+	t.is(csp.resolvePreset('test'), 'csp-preset-test');
+});
+
+test('Extend | new rule', t => {
+	const actual = csp({
+		policies: {
+			'script-src': [ 'myhost.com' ]
+		},
+		extend: {
+			'script-src': [ 'additional.host.com' ]
+		}
+	});
+
+	t.is(actual, 'script-src myhost.com additional.host.com;');
+});
+
+test('Extend | duplicating', t => {
+	const actual = csp({
+		policies: {
+			'script-src': [ 'myhost.com' ]
+		},
+		extend: {
+			'script-src': [ 'myhost.com' ]
+		}
+	});
+
+	t.is(actual, 'script-src myhost.com;');
+});
+
+test('Extend | new policy', t => {
+	const actual = csp({
+		policies: {
+			'script-src': [ 'myhost.com' ]
+		},
+		extend: {
+			'style-src': [ 'newhost.com' ]
+		}
+	});
+
+	t.is(actual, 'script-src myhost.com; style-src newhost.com;');
+});
+
 test('Nonce', t => {
 	const actual = csp.nonce('vg3eer#E4gEbw34gwq3fgqGQWBWQh');
 	const expected = "'nonce-vg3eer#E4gEbw34gwq3fgqGQWBWQh'"

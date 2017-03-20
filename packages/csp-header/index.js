@@ -51,13 +51,16 @@ function csp(params){
 		return;
 	}
 
-	// property policies is required
-	if(typeof params.policies !== 'object'){
-		return;
+	if (!params.policies) {
+		if (params.presets || params.extend) {
+			params.policies = {};
+		} else {
+			return;
+		}
 	}
 
 	// filter disallowed policies
-	const policies = Object.keys(params.policies).reduce((policies, policyName) => {
+	let policies = Object.keys(params.policies).reduce((policies, policyName) => {
 		if(allowedPolicies.indexOf(policyName) > -1){
 			if(params.policies[policyName] !== false){
 				policies[policyName] = params.policies[policyName];
@@ -66,7 +69,77 @@ function csp(params){
 		return policies;
 	}, {});
 
+	if (params.presets) {
+		params.presets.forEach(preset => {
+			let presetPolicies;
+
+			if (typeof preset === 'string') {
+				presetPolicies = requirePreset(preset);
+			} else {
+				presetPolicies = preset;
+			}
+
+			policies = extendPolicies(policies, presetPolicies);
+		});
+	}
+
+	if (params.extend) {
+		policies = extendPolicies(policies, params.extend);
+	}
+
 	return buildCSPString(policies, params['report-uri']);
+}
+
+/**
+ * Resolves require string
+ * @param {string} presetName Relative/absolute path or full/short module name
+ * @returns {string}
+ */
+function resolvePreset(presetName) {
+	const isFullModuleName = presetName.indexOf('csp-preset') === 0;
+
+	if (isFullModuleName) {
+		return presetName;
+	} else {
+		return `csp-preset-${presetName}`;
+	}
+}
+
+function requirePreset(presetName) {
+	try {
+		return require(resolvePreset(presetName));
+	} catch(err) {
+		throw new Error(`CSP preset ${presetName} is not found`);
+	}
+}
+
+/**
+ * Extends policies object
+ * @param {Object} original Original policies
+ * @param {Object} extension Additional policies
+ * @returns {Object} Extended policies
+ */
+function extendPolicies(original, extension){
+	const extended = Object.assign(original);
+
+	Object.keys(extension).forEach(policyName => {
+		const extPolicy = extension[policyName];
+		const origPolicy = original[policyName];
+
+		if (origPolicy === undefined) {
+			extended[policyName] = extPolicy;
+		} else if(Array.isArray(extPolicy) && extPolicy.length > 0 && Array.isArray(origPolicy)){
+			extPolicy.forEach(rule => {
+				if(typeof rule === 'string' && origPolicy.indexOf(rule) === -1){
+					extended[policyName].push(rule);
+				}
+			});
+		} else {
+			extended[policyName] = extPolicy[policyName];
+		}
+	});
+
+	return extended;
 }
 
 /**
@@ -77,6 +150,8 @@ function csp(params){
 csp.nonce = function(nonceId){
 	return `'nonce-${nonceId}'`;
 };
+
+csp.resolvePreset = resolvePreset;
 
 csp.NONE = "'none'";
 csp.SELF = "'self'";
