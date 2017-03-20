@@ -14,6 +14,9 @@
   ],
   "author": "frux",
   "license": "WTFPL",
+  "engines": {
+    "node": ">=4"
+  },
   "devDependencies": {
     "mocha": "^2.4.5",
     "should": "^8.3.0"

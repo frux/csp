@@ -1,19 +1,19 @@
-var should = require('should');
-var csp = require('../index');
+const should = require('should');
+const csp = require('../index');
 
-describe('Input params', function(){
-	it('should returns undefined if params was not specified', function(){
+describe('Input params', () => {
+	it('should returns undefined if params was not specified', () => {
 		should(csp()).be.type('undefined');
 	});
 
-	it('should returns undefined if policies property was not specified', function(){
+	it('should returns undefined if policies property was not specified', () => {
 		should(csp({
 			nonce: true,
 			foo: 'bar'
 		})).be.type('undefined');
 	});
 
-	it('should ignore disallowed policies', function(){
+	it('should ignore disallowed policies', () => {
 		csp({
 			policies: {
 				'script-src': [ 'test.com', csp.SELF ],
@@ -22,7 +22,7 @@ describe('Input params', function(){
 		}).should.be.equal('script-src test.com \'self\';');
 	});
 
-	it('should add report-uri param', function(){
+	it('should add report-uri param', () => {
 		csp({
 			policies: {
 				'script-src': [ csp.SELF ]
@@ -31,7 +31,7 @@ describe('Input params', function(){
 		}).should.be.equal('script-src \'self\'; report-uri https://test.com/cspreport;');
 	});
 
-	it('should support valueless directives', function(){
+	it('should support valueless directives', () => {
 		csp({
 			policies: {
 				'script-src': [ 'test.com' ],
@@ -55,22 +55,22 @@ describe('Input params', function(){
 	});
 });
 
-describe('Utils', function(){
-	it('should build nonce param', function(){
+describe('Utils', () => {
+	it('should build nonce param', () => {
 		csp.nonce('vg3eer#E4gEbw34gwq3fgqGQWBWQh').should.be.equal('\'nonce-vg3eer#E4gEbw34gwq3fgqGQWBWQh\'');
 	});
 
-	describe('Constants', function(){
-		it('should contains \'self\'', function(){
+	describe('Constants', () => {
+		it('should contains \'self\'', () => {
 			csp.SELF.should.be.equal('\'self\'');
 		});
-		it('should contains \'unsafe-inline\'', function(){
+		it('should contains \'unsafe-inline\'', () => {
 			csp.INLINE.should.be.equal('\'unsafe-inline\'');
 		});
-		it('should contains \'unsafe-eval\'', function(){
+		it('should contains \'unsafe-eval\'', () => {
 			csp.EVAL.should.be.equal('\'unsafe-eval\'');
 		});
-		it('should contains \'none\'', function(){
+		it('should contains \'none\'', () => {
 			csp.NONE.should.be.equal('\'none\'');
 		});
 	});

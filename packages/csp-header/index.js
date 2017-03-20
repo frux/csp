@@ -1,4 +1,4 @@
-var allowedPolicies = [
+const allowedPolicies = [
 	'base-uri',
 	'block-all-mixed-content',
 	'child-src',
@@ -31,23 +31,21 @@ var allowedPolicies = [
  * @returns {string}
  */
 function buildCSPString(policies, reportUri){
-	var cspString = Object.keys(policies).map(function(policyName){
+	let cspString = Object.keys(policies).map(policyName => {
 		if(policies[policyName] === true || policies[policyName].length === 0){
 			return policyName;
 		}
-		return policyName + ' ' + policies[policyName].join(' ');
-	}).join('; ') + ';';
+		return `${policyName} ${policies[policyName].join(' ')}`;
+	}).join('; ');
 
 	if(typeof reportUri === 'string'){
-		cspString += ' report-uri ' + reportUri + ';';
+		cspString += `; report-uri ${reportUri}`;
 	}
 
-	return cspString;
+	return `${cspString};`;
 }
 
 function csp(params){
-	var policies;
-
 	// params should be an object
 	if(typeof params !== 'object'){
 		return;
@@ -59,7 +57,7 @@ function csp(params){
 	}
 
 	// filter disallowed policies
-	policies = Object.keys(params.policies).reduce(function(policies, policyName){
+	const policies = Object.keys(params.policies).reduce((policies, policyName) => {
 		if(allowedPolicies.indexOf(policyName) > -1){
 			if(params.policies[policyName] !== false){
 				policies[policyName] = params.policies[policyName];
@@ -77,12 +75,12 @@ function csp(params){
  * @returns {string} Nonce param
  */
 csp.nonce = function(nonceId){
-	return '\'nonce-' + nonceId + '\'';
+	return `'nonce-${nonceId}'`;
 };
 
-csp.NONE = '\'none\'';
-csp.SELF = '\'self\'';
-csp.INLINE = '\'unsafe-inline\'';
-csp.EVAL = '\'unsafe-eval\'';
+csp.NONE = "'none'";
+csp.SELF = "'self'";
+csp.INLINE = "'unsafe-inline'";
+csp.EVAL = "'unsafe-eval'";
 
 module.exports = csp;
