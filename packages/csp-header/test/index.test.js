@@ -1,77 +1,78 @@
-const should = require('should');
-const csp = require('../index');
+import test from 'ava';
+import csp from '../index';
 
-describe('Input params', () => {
-	it('should returns undefined if params was not specified', () => {
-		should(csp()).be.type('undefined');
-	});
-
-	it('should returns undefined if policies property was not specified', () => {
-		should(csp({
-			nonce: true,
-			foo: 'bar'
-		})).be.type('undefined');
-	});
-
-	it('should ignore disallowed policies', () => {
-		csp({
-			policies: {
-				'script-src': [ 'test.com', csp.SELF ],
-				'foo-bar-src': [ 'foo', 'bar' ]
-			}
-		}).should.be.equal('script-src test.com \'self\';');
-	});
-
-	it('should add report-uri param', () => {
-		csp({
-			policies: {
-				'script-src': [ csp.SELF ]
-			},
-			'report-uri': 'https://test.com/cspreport'
-		}).should.be.equal('script-src \'self\'; report-uri https://test.com/cspreport;');
-	});
-
-	it('should support valueless directives', () => {
-		csp({
-			policies: {
-				'script-src': [ 'test.com' ],
-				'block-all-mixed-content': true
-			}
-		}).should.be.equal('script-src test.com; block-all-mixed-content;');
-
-		csp({
-			policies: {
-				'script-src': [ 'test.com' ],
-				'block-all-mixed-content': []
-			}
-		}).should.be.equal('script-src test.com; block-all-mixed-content;');
-
-		csp({
-			policies: {
-				'script-src': [ 'test.com' ],
-				'block-all-mixed-content': ''
-			}
-		}).should.be.equal('script-src test.com; block-all-mixed-content;');
-	});
+test('Empty args', t => {
+	t.is(csp(), undefined);
 });
 
-describe('Utils', () => {
-	it('should build nonce param', () => {
-		csp.nonce('vg3eer#E4gEbw34gwq3fgqGQWBWQh').should.be.equal('\'nonce-vg3eer#E4gEbw34gwq3fgqGQWBWQh\'');
+test('Empty policies', t => {
+	const actual = csp({
+		nonce: true,
+		foo: 'bar'
+	});
+	t.is(actual, undefined);
+});
+
+test('Disallowed policies', t => {
+	const actual = csp({
+		policies: {
+			'script-src': [ 'test.com', csp.SELF ],
+			'foo-bar-src': [ 'foo', 'bar' ]
+		}
+	});
+	const expected = "script-src test.com 'self';";
+	t.is(actual, expected);
+});
+
+test('report-uri', t => {
+	const actual = csp({
+		policies: {
+			'script-src': [ csp.SELF ]
+		},
+		'report-uri': 'https://test.com/cspreport'
+	})
+	const expected = "script-src 'self'; report-uri https://test.com/cspreport;";
+	t.is(actual, expected);
+});
+
+test('Valueless directives', t => {
+	const actualTrue = csp({
+		policies: {
+			'script-src': ['test.com'],
+			'block-all-mixed-content': true
+		}
 	});
 
-	describe('Constants', () => {
-		it('should contains \'self\'', () => {
-			csp.SELF.should.be.equal('\'self\'');
-		});
-		it('should contains \'unsafe-inline\'', () => {
-			csp.INLINE.should.be.equal('\'unsafe-inline\'');
-		});
-		it('should contains \'unsafe-eval\'', () => {
-			csp.EVAL.should.be.equal('\'unsafe-eval\'');
-		});
-		it('should contains \'none\'', () => {
-			csp.NONE.should.be.equal('\'none\'');
-		});
+	const actualEmptyArray = csp({
+		policies: {
+			'script-src': ['test.com'],
+			'block-all-mixed-content': []
+		}
 	});
+
+	const actualEmptyString = csp({
+		policies: {
+			'script-src': ['test.com'],
+			'block-all-mixed-content': ''
+		}
+	});
+
+	const expected = 'script-src test.com; block-all-mixed-content;';
+
+	t.is(actualTrue, expected);
+	t.is(actualEmptyArray, expected);
+	t.is(actualEmptyString, expected);
+});
+
+test('Nonce', t => {
+	const actual = csp.nonce('vg3eer#E4gEbw34gwq3fgqGQWBWQh');
+	const expected = "'nonce-vg3eer#E4gEbw34gwq3fgqGQWBWQh'"
+	t.is(actual, expected);
+});
+
+test('Constants', t => {
+	t.is(csp.SELF, "'self'");
+	t.is(csp.INLINE, "'unsafe-inline'");
+	t.is(csp.EVAL, "'unsafe-eval'");
+	t.is(csp.NONE, "'none'");
 });
