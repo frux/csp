@@ -70,6 +70,26 @@ app.use(csp({
 // result header: 'Content-Security-Policy: script-src mydefaulthost.com myadditionalhost.com; style-src: mystyles.com;'
 ```
 
+### Presets
+
+Your policies can also be extended by presets. Presets are npm-modules containing CSP rules and prefixed by ``csp-preset``. Example of preset:
+
+```js
+module.exports = {
+	'connect-src': ['my-super-service.com'],
+	'style-src': ['my-super-service.com']
+};
+```
+
+Presets can be easely applied to existing CSP rules by ``presets`` property:
+
+```js
+app.use(csp({
+    policies: myCSPPolicies,
+    presets: ['yandex-metrika', 'google-analytics'] // csp-preset-yandex-metrika and csp-preset-google-analytics will be apllied
+}));
+```
+
 ### Content-Security-Policy-Report-Only mode
 
 To switch on Report-Only mode just specify `reportOnly` param:
@@ -111,22 +131,3 @@ app.use(csp({
 }));
 // express will send header "Content-Security-Policy: script-src 'self'; report-uri https://cspreport.com/send?time=1460467355592;"
 ```
-
-### Release notes:
-
-#### v1.2.1
- * fix leaking to global scope by [@i-akhmadullin](https://github.com/i-akhmadullin)
-
-#### v1.2.0
- * new csp-header with CSP 3
-
-#### v1.1.0
- * Policies extending
-
-#### v1.0.0:
-
- * All arguments combined into single ``params`` argument
- * Added boolean param ``reportOnly`` that switches on Content-Security-Policy-Report-Only mode
-
-#### v0.1.0:
- * Dynamic tld (thanks to [@msmirnov](https://github.com/msmirnov))
