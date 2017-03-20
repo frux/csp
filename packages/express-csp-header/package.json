@@ -20,6 +20,9 @@
   ],
   "author": "frux",
   "license": "WTFPL",
+  "engines": {
+    "node": ">=4"
+  },
   "bugs": {
     "url": "https://github.com/frux/express-csp/issues"
   },
