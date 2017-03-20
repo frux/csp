@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "mocha test --check-leaks"
+    "test": "ava"
   },
   "repository": {
     "type": "git",
@@ -28,8 +28,7 @@
   },
   "homepage": "https://github.com/frux/express-csp#readme",
   "devDependencies": {
-    "mocha": "^2.4.5",
-    "should": "^8.3.0"
+    "ava": "^0.18.2"
   },
   "dependencies": {
     "csp-header": "^1.0.0",
