@@ -1,3 +1,4 @@
+'use strict';
 var cspHeader = require('csp-header');
 var crypto = require('crypto');
 var parseDomain = require('parse-domain');
