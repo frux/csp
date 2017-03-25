@@ -1,9 +1,10 @@
 'use strict';
-var cspHeader = require('csp-header');
-var crypto = require('crypto');
-var parseDomain = require('parse-domain');
-var CSP_HEADER_NAME = 'Content-Security-Policy';
-var CSP_REPORT_ONLY = '-Report-Only';
+const cspHeader = require('csp-header');
+const crypto = require('crypto');
+const parseDomain = require('parse-domain');
+
+const CSP_HEADER_NAME = 'Content-Security-Policy';
+const CSP_REPORT_ONLY = '-Report-Only';
 
 function expressCsp(params) {
 	params = params || {};
@@ -23,8 +24,8 @@ function expressCsp(params) {
 				cspString = cspString.replace(new RegExp(expressCsp.NONCE, 'g'), cspHeader.nonce(req.nonce));
 			}
 			if (cspString.indexOf(expressCsp.TLD) > -1) {
-				var domain = parseDomain(req.hostname || req.host);
-				var tld = domain && domain.tld;
+				const domain = parseDomain(req.hostname || req.host);
+				const tld = domain && domain.tld;
 				if (tld) {
 					cspString = cspString.replace(new RegExp(expressCsp.TLD, 'g'), tld);
 				}
