@@ -24,7 +24,7 @@ function expressCsp(params) {
 				cspString = cspString.replace(new RegExp(expressCsp.NONCE, 'g'), cspHeader.nonce(req.nonce));
 			}
 			if (cspString.indexOf(expressCsp.TLD) > -1) {
-				const domain = parseDomain(req.hostname || req.host);
+				const domain = parseDomain(req.hostname);
 				const tld = domain && domain.tld;
 				if (tld) {
 					cspString = cspString.replace(new RegExp(expressCsp.TLD, 'g'), tld);
