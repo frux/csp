@@ -1,16 +1,18 @@
 # Content-Security-Policy middleware for Express
+[![Build Status](https://travis-ci.org/frux/express-csp-header.svg?branch=master)](https://travis-ci.org/frux/express-csp-header)
+[![Coverage Status](https://coveralls.io/repos/github/frux/express-csp-header/badge.svg?branch=master)](https://coveralls.io/github/frux/express-csp-header?branch=master)
 
 ## Usage
 
 ```js
-var csp = require('express-csp-header');
+const csp = require('express-csp-header');
 app.use(csp({
     policies: {
-        'default-src': [ csp.SELF ],
-        'script-src': [ csp.SELF, csp.INLINE, 'somehost.com' ],
-        'style-src': [ csp.SELF, 'mystyles.net' ],
-        'img-src': [ 'data:', 'images.com' ],
-        'worker-src': [ csp.NONE ],
+        'default-src': [csp.SELF],
+        'script-src': [csp.SELF, csp.INLINE, 'somehost.com'],
+        'style-src': [csp.SELF, 'mystyles.net'],
+        'img-src': ['data:', 'images.com'],
+        'worker-src': [csp.NONE],
         'block-all-mixed-content': true
     }
 }));
@@ -25,12 +27,12 @@ If you want to use nonce parameter you should use NONCE constant. Nonce key will
 ```js
 app.use(csp({
     policies: {
-        'script-src': [ csp.NONCE ]
+        'script-src': [csp.NONCE]
     }
 }));
 // express will send header with a random nonce key "Content-Security-Policy: script-src 'nonce-pSQ9TwXOMI+HezKshnuRaw==';"
 
-app.use(function(req, res){
+app.use((req, res) => {
     console.log(req.nonce); // 'pSQ9TwXOMI+HezKshnuRaw=='
 })
 ```
@@ -42,7 +44,7 @@ If you have more than one tlds you may want to keep current tld in your security
 ```js
 app.use(csp({
     policies: {
-        'script-src': [ `mystatic.${CSP.TLD}` ]
+        'script-src': [`mystatic.${csp.TLD}`]
     }
 }));
 // for myhost.com it will send: "Content-Security-Policy: script-src mystatic.com;"
@@ -56,14 +58,14 @@ Sometimes you need to extend existing policies. You can do it by `extend` param:
 
 ```js
 var defaultPolicies = {
-    'script-src': [ 'mydefaulthost.com' ]
+    'script-src': ['mydefaulthost.com']
 };
 
 app.use(csp({
     policies: defaultPolicies,
     extend: {
-        'script-src': [ 'myadditionalhost.com' ],
-        'style-src': [ 'mystyles.com' ]
+        'script-src': ['myadditionalhost.com'],
+        'style-src': ['mystyles.com']
     }
 }));
 
@@ -97,7 +99,7 @@ To switch on Report-Only mode just specify `reportOnly` param:
 ```js
 app.use(csp({
     policies: {
-        'script-src': [ CSP.SELF ]
+        'script-src': [csp.SELF]
     },
     reportOnly: true
 }));
@@ -111,7 +113,7 @@ If you want to specify ``report-uri`` param you should pass it as the second arg
 ```js
 app.use(csp({
     policies: {
-        'script-src': [ csp.SELF ]
+        'script-src': [csp.SELF]
     },
     reportUri: 'https://cspreport.com/send'
 }));
@@ -123,10 +125,10 @@ If you want to pass some params to the report uri just pass function instead of 
 ```js
 app.use(csp({
     policies: {
-        'script-src': [ csp.SELF ]
+        'script-src': [csp.SELF]
     },
-    reportUri: function(req, res){
-        return 'https://cspreport.com/send?time=' + Number(new Date());
+    reportUri: (req, res) => {
+        return `https://cspreport.com/send?time=${Number(new Date())}`;
     }
 }));
 // express will send header "Content-Security-Policy: script-src 'self'; report-uri https://cspreport.com/send?time=1460467355592;"
