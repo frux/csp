@@ -1,5 +1,5 @@
-import test from 'ava';
-import expressCsp from '../';
+/* global describe, test, expect */
+const expressCsp = require('../');
 
 const mockApp = {
 	use(middleware, req, res) {
@@ -15,7 +15,7 @@ const mockApp = {
 	}
 };
 
-test('should sets CSP header', t => {
+test('should sets CSP header', () => {
 	const actual = mockApp.use(expressCsp({
 		policies: {
 			'default-src': [expressCsp.SELF],
@@ -28,73 +28,88 @@ test('should sets CSP header', t => {
 	}));
 	const expected = "default-src 'self'; script-src 'self' 'unsafe-inline' somehost.com; style-src 'self' mystyles.net; img-src data: images.com; worker-src 'none'; block-all-mixed-content;";
 
-	t.is(actual.res.headers['Content-Security-Policy'], expected);
+	expect(actual.res.headers['Content-Security-Policy']).toBe(expected);
 });
 
-test('Nonce', t => {
+test('should no params', () => {
+	const actual = mockApp.use(expressCsp());
+	const expected = undefined;
+
+	expect(actual.res.headers['Content-Security-Policy']).toBe(expected);
+});
+
+test('should set req.nonce', () => {
 	const actual = mockApp.use(expressCsp({
 		policies: {
 			'script-src': [expressCsp.NONCE]
 		}
 	}));
 
-	t.true(/^script-src 'nonce-.+';/.test(actual.res.headers['Content-Security-Policy']));
-	t.is(typeof actual.req.nonce, 'string');
+	expect(/^script-src 'nonce-.+';/.test(actual.res.headers['Content-Security-Policy']))
+		.toBeTruthy();
+	expect(typeof actual.req.nonce).toBe('string');
 });
 
-test('report-uri | string', t => {
-	const actual = mockApp.use(expressCsp({
-		policies: {'script-src': [expressCsp.SELF]},
-		reportUri: 'https://cspreport.com'
-	}));
+describe('report-uri', () => {
+	test('should accept string', () => {
+		const actual = mockApp.use(expressCsp({
+			policies: {'script-src': [expressCsp.SELF]},
+			reportUri: 'https://cspreport.com'
+		}));
 
-	t.is(actual.res.headers['Content-Security-Policy'], "script-src 'self'; report-uri https://cspreport.com;");
-});
+		expect(actual.res.headers['Content-Security-Policy'])
+			.toBe("script-src 'self'; report-uri https://cspreport.com;");
+	});
 
-test('report-uri | function', t => {
-	const actual = mockApp.use(expressCsp({
-		policies: {
-			'script-src': [expressCsp.SELF]
-		},
-		reportUri() {
-			return 'https://cspreport.com/send?time=' + Number(new Date());
-		}
-	}));
-
-	t.true(/^script-src\s'self';\sreport-uri\shttps:\/\/cspreport\.com\/send\?time=[0-9]+;$/.test(actual.res.headers['Content-Security-Policy']));
-});
-
-test('tld', t => {
-	const actual = mockApp.use(
-		expressCsp({
+	test('should accept function', () => {
+		const actual = mockApp.use(expressCsp({
 			policies: {
-				'script-src': ['myhost.' + expressCsp.TLD]
+				'script-src': [expressCsp.SELF]
+			},
+			reportUri() {
+				return 'https://cspreport.com/send?time=' + Number(new Date());
 			}
-		}),
-		{
-			hostname: 'example.com'
-		}
-	);
-
-	t.is(actual.res.headers['Content-Security-Policy'], 'script-src myhost.com;');
+		}));
+		const expected = /^script-src\s'self';\sreport-uri\shttps:\/\/cspreport\.com\/send\?time=[0-9]+;$/;
+		expect(actual.res.headers['Content-Security-Policy']).toMatch(expected);
+	});
 });
 
-test('tld | req.tld is undefined', t => {
-	const actual = mockApp.use(
-		expressCsp({
-			policies: {
-				'script-src': ['myhost.' + expressCsp.TLD]
+describe('tld', () => {
+	test('should replace tld', () => {
+		const actual = mockApp.use(
+			expressCsp({
+				policies: {
+					'script-src': ['myhost.' + expressCsp.TLD]
+				}
+			}),
+			{
+				hostname: 'example.com'
 			}
-		}),
-		{
-			hostname: 'localhost'
-		}
-	);
+		);
 
-	t.is(actual.res.headers['Content-Security-Policy'], 'script-src myhost.%tld%;');
+		expect(actual.res.headers['Content-Security-Policy'])
+			.toBe('script-src myhost.com;');
+	});
+
+	test('should ignore %tld% if req.tld is undefined', () => {
+		const actual = mockApp.use(
+			expressCsp({
+				policies: {
+					'script-src': ['myhost.' + expressCsp.TLD]
+				}
+			}),
+			{
+				hostname: 'localhost'
+			}
+		);
+
+		expect(actual.res.headers['Content-Security-Policy'])
+			.toBe('script-src myhost.%tld%;');
+	});
 });
 
-test('Report-Only', t => {
+test('Report-Only', () => {
 	const actual = mockApp.use(expressCsp({
 		policies: {
 			'script-src': ['myhost.com']
@@ -102,5 +117,6 @@ test('Report-Only', t => {
 		reportOnly: true
 	}));
 
-	t.is(actual.res.headers['Content-Security-Policy-Report-Only'], 'script-src myhost.com;');
+	expect(actual.res.headers['Content-Security-Policy-Report-Only'])
+		.toBe('script-src myhost.com;');
 });

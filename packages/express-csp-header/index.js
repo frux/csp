@@ -31,8 +31,8 @@ function expressCsp(params) {
 				}
 			}
 			res.set(CSP_HEADER_NAME + (params.reportOnly ? CSP_REPORT_ONLY : ''), cspString);
-			next();
 		}
+		next();
 	};
 }
 
