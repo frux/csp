@@ -52,7 +52,7 @@ app.use(csp({
 // etc
 ```
 
-### Policy extending
+### Policy extending 🔥 DEPRECATED use `presets` instead🔥
 
 Sometimes you need to extend existing policies. You can do it by `extend` param:
 
@@ -74,23 +74,7 @@ app.use(csp({
 
 ### Presets
 
-Your policies can also be extended by presets. Presets are npm-modules containing CSP rules and prefixed by ``csp-preset``. Example of preset:
-
-```js
-module.exports = {
-	'connect-src': ['my-super-service.com'],
-	'style-src': ['my-super-service.com']
-};
-```
-
-Presets can be easely applied to existing CSP rules by ``presets`` property:
-
-```js
-app.use(csp({
-    policies: myCSPPolicies,
-    presets: ['yandex-metrika', 'google-analytics'] // csp-preset-yandex-metrika and csp-preset-google-analytics will be apllied
-}));
-```
+Read about preset in [`csp-header` docs](https://github.com/frux/csp-header#presets)
 
 ### Content-Security-Policy-Report-Only mode
 
@@ -107,8 +91,6 @@ app.use(csp({
 ```
 
 ### report-uri parameter
-
-If you want to specify ``report-uri`` param you should pass it as the second argument:
 
 ```js
 app.use(csp({

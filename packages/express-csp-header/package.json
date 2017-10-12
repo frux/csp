@@ -33,7 +33,7 @@
     "jest": "^19.0.2"
   },
   "dependencies": {
-    "csp-header": "^1.0.1",
+    "csp-header": "^1.1.0",
     "parse-domain": "^0.2.1"
   }
 }
