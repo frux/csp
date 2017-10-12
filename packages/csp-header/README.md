@@ -24,7 +24,67 @@ csp({
 // result: "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'nonce-gg3g43#$g32gqewgaAEGeag2@#GFQ#g==' example.com; style-src 'self' mystyle.net; report-uri https://cspreport.com/send;"
 ```
 
-## Extending
+## Params
+```js
+{
+	policies: { [key: string]: string[] },
+	presets: policies[] | { [key: string]: policies }
+	'report-uri': string,
+	extend: policies // DEPRECATED use presets instead
+}
+```
+
+## Presets
+It's a good idea to group your csp rules into presets. `csp-header` supports two way of using presets.
+It can be specified as an array of policies:
+```js
+{
+	presets: [ cspRulesForSomeServiceAPI, cspRulesForMyStaticCDN, someOtherCSPRules ]
+}
+```
+
+or as a keyed object:
+```js
+{
+	presets: {
+		api: cspRulesForSomeServiceAPI,
+		statics: cspRulesForMyStaticCDN,
+		youtubeVideos: cspRulesForYouTube
+	}
+}
+```
+
+The second way allows you to overwrite presets by conditions:
+```js
+const cspRules = require('./config/csp');
+
+if (NODE_ENV === 'development') {
+	cspRules.presets.statics = ['self'];
+}
+```
+
+Also you can use presets from npm prefixed by `csp-preset` as strings:
+```js
+{
+	presets: {
+		superPuperService: 'super-puper-service' // takes node_modules/csp-preset-super-puper-service
+	}
+}
+```
+
+## Preset format
+If you have a web-service feel free to publish preset of rules for using your service. For example your service is ``my-super-service.com``. Just publish preset ``csp-preset-my-super-service`` containing following code:
+```js
+modules.exports = {
+  'script-src': ['api.my-super-service.com'],
+  'img-src': ['images.my-super-service.com']
+};
+```
+
+And you will get a lot of thanks ;)
+
+
+## Extend 🔥 DEPRECATED! use `presets` instead 🔥
 If you want to extend your config by some rules:
 ```js
 const myCSPPolicies = require('./my-csp-rules');
@@ -36,26 +96,3 @@ csp({
   }
 });
 ```
-
-## Presets
-You can use csp presets prefixed by 'csp-preset'. If you have a web-service it would be great if you write preset with rules for your service users.
-
-E.g. your service is called ``my-super-service.com``. You publish preset ``csp-preset-my-super-service`` containing following code:
-```js
-modules.exports = {
-  'script-src': ['api.my-super-service.com'],
-  'img-src': ['images.my-super-service.com']
-};
-```
-
-Then someone wants to configure its CSP to work with your service. And now it's so easy:
-```js
-const myCSPPolicies = require('./my-csp-rules');
-
-csp({
-  policies: myCSPPolicies,
-  presets: ['my-super-service']
-});
-```
-
-And you will get a lot of thanks ;)
