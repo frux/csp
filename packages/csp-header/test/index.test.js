@@ -72,6 +72,16 @@ test('Presets | extend', t => {
 	t.is(actual, 'script-src test.com; style-src test.com;');
 });
 
+test('Presets | object', t => {
+	const actual = csp({
+		presets: {
+			test: require('./fixtures/presets/csp-preset-test')
+		}
+	});
+
+	t.is(actual, 'script-src test.com; style-src test.com;');
+});
+
 test('Presets | resolve', t => {
 	t.is(csp.resolvePreset('csp-preset-test'), 'csp-preset-test');
 	t.is(csp.resolvePreset('test'), 'csp-preset-test');

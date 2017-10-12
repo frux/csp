@@ -71,7 +71,9 @@ function csp(params) {
 	}, {});
 
 	if (params.presets) {
-		params.presets.forEach(preset => {
+		// Object.keys also works with array keys
+		Object.keys(params.presets).forEach(key => {
+			const preset = params.presets[key];
 			let presetPolicies;
 
 			if (typeof preset === 'string') {
