@@ -3,12 +3,12 @@ declare module 'express-csp-header' {
   import { Request, RequestHandler, Response } from 'express';
 
   namespace expressCsp {
-    export const SELF: string;
-    export const INLINE: string;
-    export const EVAL: string;
-    export const NONE: string;
-    export const NONCE: string;
-    export const TLD: string;
+    const SELF: string;
+    const INLINE: string;
+    const EVAL: string;
+    const NONE: string;
+    const NONCE: string;
+    const TLD: string;
   }
 
   // as soon as csp-header starts exposing TypeScript declarations,
