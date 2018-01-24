@@ -1,4 +1,5 @@
 declare module 'express-csp-header' {
+  import csp = require('csp-header');
   import { Request, RequestHandler, Response } from 'express';
 
   namespace expressCsp {
@@ -14,16 +15,12 @@ declare module 'express-csp-header' {
     [index: string]: T;
   }
 
-  // as soon as csp-header starts exposing TypeScript declarations,
-  // use that instead of this insipid temporariness
-  type Policies = Dictionary<string[] | boolean>;
-
   type ReportUriFunc = (req: Request, res: Response) => string;
 
   interface Params {
-    policies?: Policies;
-    extend?: Policies;
-    presets?: Array<Policies | string> | Dictionary<Policies | string>;
+    policies?: csp.Policies;
+    extend?: csp.Policies;
+    presets?: Array<csp.Policies | string> | Dictionary<csp.Policies | string>;
     reportOnly?: boolean;
     reportUri?: string | ReportUriFunc;
   }
