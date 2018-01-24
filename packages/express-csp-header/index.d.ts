@@ -1,5 +1,4 @@
 declare module 'express-csp-header' {
-  import { Dictionary } from 'lodash';
   import { Request, RequestHandler, Response } from 'express';
 
   namespace expressCsp {
@@ -9,6 +8,10 @@ declare module 'express-csp-header' {
     const NONE: string;
     const NONCE: string;
     const TLD: string;
+  }
+
+  interface Dictionary<T> {
+    [index: string]: T;
   }
 
   // as soon as csp-header starts exposing TypeScript declarations,
