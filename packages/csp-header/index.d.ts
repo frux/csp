@@ -42,7 +42,7 @@ declare module 'csp-header' {
     policies?: csp.Policies;
     extend?: csp.Policies;
     presets?: Array<csp.Policies | string> | Dictionary<csp.Policies | string>;
-    'report-uri': string;
+    'report-uri'?: string;
   }
 
   function csp(params: Params): string;
