@@ -30,6 +30,13 @@ declare module 'csp-header' {
       'worker-src'?: string[];
     }
 
+    interface Params {
+      policies?: Policies;
+      extend?: Policies;
+      presets?: Array<Policies | string> | Dictionary<Policies | string>;
+      'report-uri'?: string;
+    }
+
     function nonce(nonceId: string): string;
     function resolvePreset(presetName: string): string;
     const NONE: string;
@@ -38,14 +45,7 @@ declare module 'csp-header' {
     const EVAL: string;
   }
 
-  interface Params {
-    policies?: csp.Policies;
-    extend?: csp.Policies;
-    presets?: Array<csp.Policies | string> | Dictionary<csp.Policies | string>;
-    'report-uri'?: string;
-  }
-
-  function csp(params: Params): string;
+  function csp(params: csp.Params): string;
 
   export = csp;
 }
