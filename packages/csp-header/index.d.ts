@@ -19,6 +19,7 @@ declare module 'csp-header' {
       'manifest-src'?: string[];
       'media-src'?: string[];
       'object-src'?: string[];
+      'prefetch-src'?: string[];
       'plugin-types'?: string[];
       'referrer'?: [ string ];
       'reflected-xss'?: boolean | string[];

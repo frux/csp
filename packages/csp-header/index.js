@@ -14,6 +14,7 @@ const allowedPolicies = [
 	'manifest-src',
 	'media-src',
 	'object-src',
+	'prefetch-src',
 	'plugin-types',
 	'referrer',
 	'reflected-xss',
