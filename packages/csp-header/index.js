@@ -131,7 +131,7 @@ function extendPolicies(original, extension) {
 
 		if (origPolicy === undefined) {
 			extended[policyName] = extPolicy;
-		} else if (Array.isArray(extPolicy) && extPolicy.length > 0 && Array.isArray(origPolicy)) {
+		} else if (Array.isArray(extPolicy) && Array.isArray(origPolicy)) {
 			extPolicy.forEach(rule => {
 				if (typeof rule === 'string' && origPolicy.indexOf(rule) === -1) {
 					extended[policyName].push(rule);

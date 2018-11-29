@@ -87,6 +87,19 @@ test('Presets | resolve', t => {
 	t.is(csp.resolvePreset('test'), 'csp-preset-test');
 });
 
+test('Presets | empty array', t => {
+	const actual = csp({
+		policies: {
+			'script-src': ['test.com']
+		},
+		presets: [{
+			'script-src': []
+		}]
+	});
+
+	t.is(actual, 'script-src test.com;');
+});
+
 test('Extend | new rule', t => {
 	const actual = csp({
 		policies: {
@@ -124,6 +137,19 @@ test('Extend | new policy', t => {
 	});
 
 	t.is(actual, 'script-src myhost.com; style-src newhost.com;');
+});
+
+test('Extend | empty array', t => {
+	const actual = csp({
+		policies: {
+			'script-src': ['test.com']
+		},
+		extend: {
+			'script-src': []
+		}
+	});
+
+	t.is(actual, 'script-src test.com;');
 });
 
 test('Nonce', t => {
