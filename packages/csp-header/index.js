@@ -123,24 +123,26 @@ function requirePreset(presetName) {
  * @returns {Object} Extended policies
  */
 function extendPolicies(original, extension) {
-	const extended = Object.assign(original);
+	const extended = {};
 
-	Object.keys(extension).forEach(policyName => {
-		const extPolicy = extension[policyName];
-		const origPolicy = original[policyName];
+	for (let policyName in original) {
+		const mergedRules = new Set(original[policyName]);
 
-		if (origPolicy === undefined) {
-			extended[policyName] = extPolicy;
-		} else if (Array.isArray(extPolicy) && Array.isArray(origPolicy)) {
-			extPolicy.forEach(rule => {
-				if (typeof rule === 'string' && origPolicy.indexOf(rule) === -1) {
-					extended[policyName].push(rule);
-				}
-			});
-		} else {
-			extended[policyName] = extPolicy[policyName];
+		if (extension[policyName]) {
+			for (let rule of extension[policyName]) {
+				mergedRules.add(rule);
+			}
 		}
-	});
+
+		extended[policyName] = Array.from(mergedRules);
+	}
+
+	for (let policyName in extension) {
+		if (extended[policyName]) {
+			continue;
+		}
+		extended[policyName] = extension[policyName].slice();
+	}
 
 	return extended;
 }

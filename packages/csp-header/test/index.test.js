@@ -126,6 +126,24 @@ test('Extend | duplicating', t => {
 	t.is(actual, 'script-src myhost.com;');
 });
 
+test('Extend | should not mutate args', t => {
+	const policies = {
+		'script-src': ['myhost.com']
+	};
+	const presets = {
+		myPreset: {
+			'script-src': ['otherhost.com']
+		}
+	};
+	csp({
+		policies,
+		presets
+	});
+
+	t.is(policies['script-src'].length, 1);
+	t.is(policies['script-src'][0], 'myhost.com');
+});
+
 test('Extend | new policy', t => {
 	const actual = csp({
 		policies: {
