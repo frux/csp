@@ -82,6 +82,23 @@ test('Presets | object', t => {
 	t.is(actual, 'script-src test.com; style-src test.com;');
 });
 
+test('Presets | array', t => {
+	const actual = csp({
+		presets: [
+			{
+				'script-src': ['test.com'],
+				'style-src': ['test.com']
+			},
+			{
+				'script-src': ['test2.com'],
+				'style-src': ['test2.com']
+			}
+		]
+	});
+
+	t.is(actual, 'script-src test.com test2.com; style-src test.com test2.com;');
+});
+
 test('Presets | resolve', t => {
 	t.is(csp.resolvePreset('csp-preset-test'), 'csp-preset-test');
 	t.is(csp.resolvePreset('test'), 'csp-preset-test');
