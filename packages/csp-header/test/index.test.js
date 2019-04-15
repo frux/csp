@@ -87,7 +87,8 @@ test('Presets | array', t => {
 		presets: [
 			{
 				'script-src': ['test.com'],
-				'style-src': ['test.com']
+				'style-src': ['test.com'],
+				'block-all-mixed-content': true
 			},
 			{
 				'script-src': ['test2.com'],
@@ -96,7 +97,7 @@ test('Presets | array', t => {
 		]
 	});
 
-	t.is(actual, 'script-src test.com test2.com; style-src test.com test2.com;');
+	t.is(actual, 'script-src test.com test2.com; style-src test.com test2.com; block-all-mixed-content;');
 });
 
 test('Presets | resolve', t => {

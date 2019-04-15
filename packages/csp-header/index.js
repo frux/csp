@@ -126,22 +126,35 @@ function extendPolicies(original, extension) {
 	const extended = {};
 
 	for (let policyName in original) {
-		const mergedRules = new Set(original[policyName]);
+		if (Array.isArray(original[policyName])) {
+			const mergedRules = new Set(original[policyName]);
 
-		if (extension[policyName]) {
-			for (let rule of extension[policyName]) {
-				mergedRules.add(rule);
+			if (extension[policyName]) {
+				for (let rule of extension[policyName]) {
+					mergedRules.add(rule);
+				}
 			}
+
+			extended[policyName] = Array.from(mergedRules);
+			continue;
 		}
 
-		extended[policyName] = Array.from(mergedRules);
+		extended[policyName] = extension[policyName] ?
+			extension[policyName] :
+			original[policyName];
 	}
 
 	for (let policyName in extension) {
 		if (extended[policyName]) {
 			continue;
 		}
-		extended[policyName] = extension[policyName].slice();
+
+		if (Array.isArray(extension[policyName])) {
+			extended[policyName] = extension[policyName].slice();
+			continue;
+		}
+
+		extended[policyName] = extension[policyName];
 	}
 
 	return extended;
