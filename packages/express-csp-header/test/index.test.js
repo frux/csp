@@ -92,6 +92,25 @@ describe('tld', () => {
 			.toBe('script-src myhost.com;');
 	});
 
+	test('should pass domainOptions to parse-domain', () => {
+		const actual = mockApp.use(
+			expressCsp({
+				policies: {
+					'script-src': ['myhost.' + expressCsp.TLD]
+				},
+				domainOptions: {
+					customTlds: ['my-custom-tld.com']
+				}
+			}),
+			{
+				hostname: 'example.my-custom-tld.com'
+			}
+		);
+
+		expect(actual.res.headers['Content-Security-Policy'])
+			.toBe('script-src myhost.my-custom-tld.com;');
+	});
+
 	test('should ignore %tld% if req.tld is undefined', () => {
 		const actual = mockApp.use(
 			expressCsp({

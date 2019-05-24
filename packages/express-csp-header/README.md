@@ -52,6 +52,25 @@ app.use(csp({
 // etc
 ```
 
+### TLD parsing options
+
+TLD to replace `csp.TLD` in policies is specified using `parse-domain` module. You can pass [its options](https://github.com/peerigon/parse-domain#parseoptions) into `domainOptions` parameter
+
+```js
+app.use(csp({
+    policies: {
+        'script-src': [`mystatic.${csp.TLD}`]
+    },
+    domainOptions: {
+        customTlds: ['example.com']
+    }
+}
+}));
+// for myhost.com it will send: "Content-Security-Policy: script-src mystatic.com;"
+// for myhost.example.com it will send: "Content-Security-Policy: script-src mystatic.example.com;"
+// etc
+```
+
 ### Policy extending 🔥 DEPRECATED use `presets` instead🔥
 
 Sometimes you need to extend existing policies. You can do it by `extend` param:
