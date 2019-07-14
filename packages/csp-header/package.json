@@ -5,7 +5,8 @@
   "main": "index.js",
   "types": "index.d.ts",
   "scripts": {
-    "test": "ava"
+    "test": "jest",
+    "build": "tsc --outDir ./ ./src/index.ts"
   },
   "keywords": [
     "csp",
@@ -16,13 +17,15 @@
   "author": "frux",
   "license": "WTFPL",
   "engines": {
-    "node": ">=4"
+    "node": ">=6"
   },
   "devDependencies": {
-    "ava": "^0.18.2"
-  },
-  "directories": {
-    "test": "test"
+    "@types/jest": "^24.0.13",
+    "@types/node": "^12.0.7",
+    "jest": "^24.8.0",
+    "ts-jest": "^24.0.2",
+    "ts-node": "^8.2.0",
+    "typescript": "^3.5.1"
   },
   "dependencies": {},
   "repository": {
