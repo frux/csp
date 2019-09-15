@@ -68,6 +68,8 @@ And you'll get a lot of thanks ;)
 
 ### `policies` was renamed to `directives`
 
+### Minimal supported version of node is 8
+
 ### Dropped support of `extend`
 `extend` was marked as deprecated in previous versions. It doesn't work anymore. Use `presets` instead.
 

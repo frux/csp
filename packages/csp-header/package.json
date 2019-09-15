@@ -17,7 +17,7 @@
   "author": "frux",
   "license": "WTFPL",
   "engines": {
-    "node": ">=6"
+    "node": ">=8"
   },
   "devDependencies": {
     "@types/jest": "^24.0.13",
