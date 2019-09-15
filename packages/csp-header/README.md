@@ -1,5 +1,5 @@
 # csp-header
-Content-Security-Policy header generator for Node.JS
+Content-Security-Policy header generator for Node
 
 ## Usage
 ```js
@@ -35,39 +35,20 @@ csp({
 ```
 
 ## Presets
-It's a good idea to group your csp rules into presets. `csp-header` supports two way of using presets.
-It can be specified as an array of policies:
+It's a good idea to group your csp rules into presets. `csp-header` supports two ways of specifying presets. As an array of policies:
 ```js
 {
     presets: [ cspRulesForSomeServiceAPI, cspRulesForMyStaticCDN, someOtherCSPRules ]
 }
 ```
 
-or as a keyed object:
+or as a map of presets:
 ```js
 {
     presets: {
         api: cspRulesForSomeServiceAPI,
         statics: cspRulesForMyStaticCDN,
         youtubeVideos: cspRulesForYouTube
-    }
-}
-```
-
-The second way allows you to overwrite presets by conditions:
-```js
-const cspRules = require('./config/csp');
-
-if (NODE_ENV === 'development') {
-    cspRules.presets.statics = ['self'];
-}
-```
-
-Also you can use presets from npm prefixed by `csp-preset` as strings:
-```js
-{
-    presets: {
-        superPuperService: 'super-puper-service' // takes node_modules/csp-preset-super-puper-service
     }
 }
 ```
@@ -81,18 +62,31 @@ modules.exports = {
 };
 ```
 
-And you will get a lot of thanks ;)
+And you'll get a lot of thanks ;)
 
+## BREAKING CHANGES in csp-header@2
 
-## Extend 🔥 DEPRECATED! use `presets` instead 🔥
-If you want to extend your config by some rules:
+### `policies` was renamed to `directives`
+
+### Dropped support of `extend`
+`extend` was marked as deprecated in previous versions. It doesn't work anymore. Use `presets` instead.
+
+### Dropped support of specifying presets as a string
+`csp-header` used to require preset if you specify it as a string. Now, please require it by yourself.
+Before:
 ```js
-const myCSPPolicies = require('./my-csp-rules');
-
-csp({
-    policies: myCSPPolicies,
-    extend: {
-        'connect-src': ['test.com']
-    }
-});
+{
+    //...
+    presets: ['csp-preset-myservice']
+}
 ```
+Now:
+```js
+{
+    //...
+    presets: [require('csp-preset-myservice')]
+}
+```
+
+### Calling with no arguments returns empty string
+It used to return `undefined`.
