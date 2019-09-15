@@ -12,7 +12,7 @@ describe('Empty input', () => {
 describe('Validation', () => {
 	test('should filter unknown directives', () => {
 		expect(getCSP({
-			policies: {
+			directives: {
 				'script-src': [ 'test1' ],
 				['foo1' as unknown as CSPDirectiveName]: [ 'bar1' ]
 			},
@@ -27,7 +27,7 @@ describe('Validation', () => {
 describe('Report URI', () => {
 	test('shold add report-uri to CSP string', () => {
 		expect(getCSP({
-			policies: { 'script-src': ['test.com'] },
+			directives: { 'script-src': ['test.com'] },
 			reportUri: 'csp-report.test.com'
 		})).toBe('script-src test.com; report-uri csp-report.test.com;');
 	});
@@ -37,7 +37,7 @@ describe('Presets', () => {
 	describe('Array format', () => {
 		test('should add new directives', () => {
 			expect(getCSP({
-				policies: {
+				directives: {
 					'script-src': [ 'domain1.com' ]
 				},
 				presets: [
@@ -50,7 +50,7 @@ describe('Presets', () => {
 
 		test('should rewrite merge with existing rules', () => {
 			expect(getCSP({
-				policies: {
+				directives: {
 					'script-src': [ 'domain1.com' ]
 				},
 				presets: [
@@ -63,7 +63,7 @@ describe('Presets', () => {
 
 		test('should work with empty policies', () => {
 			expect(getCSP({
-				policies: {},
+				directives: {},
 				presets: [
 					{
 						'script-src': [ 'domain1.com' ]
@@ -84,7 +84,7 @@ describe('Presets', () => {
 
 		test('should work with empty presets list', () => {
 			expect(getCSP({
-				policies: {
+				directives: {
 					'script-src': [ 'domain1.com' ]
 				},
 				presets: []
@@ -93,7 +93,7 @@ describe('Presets', () => {
 
 		test('should remove duplicating rules', () => {
 			expect(getCSP({
-				policies: {
+				directives: {
 					'script-src': [ 'domain1.com', 'domain2.com' ],
 					'style-src': [ 'domain1.com' ]
 				},
@@ -108,7 +108,7 @@ describe('Presets', () => {
 
 		test('should not mutate source policies', () => {
 			let params: CSPHeaderParams = {
-				policies: {
+				directives: {
 					'script-src': [ 'domain1.com' ]
 				},
 				presets: [
@@ -121,7 +121,7 @@ describe('Presets', () => {
 			getCSP(params);
 
 			expect(params).toMatchObject({
-				policies: {
+				directives: {
 					'script-src': [ 'domain1.com' ]
 				},
 				presets: [
@@ -136,7 +136,7 @@ describe('Presets', () => {
 	describe('Object format', () => {
 		test('should add new directives', () => {
 			expect(getCSP({
-				policies: {
+				directives: {
 					'script-src': [ 'domain1.com' ]
 				},
 				presets: {
@@ -149,7 +149,7 @@ describe('Presets', () => {
 
 		test('should rewrite merge with existing rules', () => {
 			expect(getCSP({
-				policies: {
+				directives: {
 					'script-src': [ 'domain1.com' ]
 				},
 				presets: {
@@ -162,7 +162,7 @@ describe('Presets', () => {
 
 		test('should work with empty policies', () => {
 			expect(getCSP({
-				policies: {},
+				directives: {},
 				presets: {
 					myPreset: {
 						'script-src': [ 'domain1.com' ]
@@ -183,7 +183,7 @@ describe('Presets', () => {
 
 		test('should work with empty presets list', () => {
 			expect(getCSP({
-				policies: {
+				directives: {
 					'script-src': [ 'domain1.com' ]
 				},
 				presets: {}
@@ -192,7 +192,7 @@ describe('Presets', () => {
 
 		test('should remove duplicating rules', () => {
 			expect(getCSP({
-				policies: {
+				directives: {
 					'script-src': [ 'domain1.com', 'domain2.com' ],
 					'style-src': [ 'domain1.com' ]
 				},
@@ -207,7 +207,7 @@ describe('Presets', () => {
 
 		test('should not mutate source policies', () => {
 			let params: CSPHeaderParams = {
-				policies: {
+				directives: {
 					'script-src': [ 'domain1.com' ]
 				},
 				presets: {
@@ -220,7 +220,7 @@ describe('Presets', () => {
 			getCSP(params);
 
 			expect(params).toMatchObject({
-				policies: {
+				directives: {
 					'script-src': [ 'domain1.com' ]
 				},
 				presets: {
@@ -236,7 +236,7 @@ describe('Presets', () => {
 describe('Boolean directives', () => {
 	test('should enable rule with true', () => {
 		expect(getCSP({
-			policies: {
+			directives: {
 				'script-src': [ 'domain1.com' ],
 				'block-all-mixed-content': true
 			}
@@ -245,7 +245,7 @@ describe('Boolean directives', () => {
 
 	test('should disable rule with false', () => {
 		expect(getCSP({
-			policies: {
+			directives: {
 				'script-src': [ 'domain1.com' ],
 				'block-all-mixed-content': false
 			}

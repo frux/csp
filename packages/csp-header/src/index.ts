@@ -2,9 +2,9 @@
  * Build CSP header value from params
  */
 export default function getCSP(params: CSPHeaderParams = {}): string {
-	let { policies = {}, presets = {}, reportUri } = params;
+	let { directives = {}, presets = {}, reportUri } = params;
 	let presetsList = normalizePresetsList(presets);
-	let mergedPolicies = applyPresets(policies, presetsList);
+	let mergedPolicies = applyPresets(directives, presetsList);
 
 	return policyToString(mergedPolicies, reportUri);
 }
@@ -13,15 +13,15 @@ export default function getCSP(params: CSPHeaderParams = {}): string {
  * Build CSP header value from resolved policy
  */
 
-function policyToString(policies: CSPPolicies, reportUri?: string): string {
+function policyToString(directives: CSPDirectives, reportUri?: string): string {
 	let cspStringParts: string[] = [];
 
-	for (let directiveName in policies) {
-		if (!policies.hasOwnProperty(directiveName)) {
+	for (let directiveName in directives) {
+		if (!directives.hasOwnProperty(directiveName)) {
 			continue;
 		}
 
-		let directiveValue: CSPDirectiveValue = policies[directiveName as keyof CSPPolicies];
+		let directiveValue: CSPDirectiveValue = directives[directiveName as keyof CSPDirectives];
 		let directiveRulesString = getDirectiveString(
 			directiveName as CSPDirectiveName,
 			directiveValue
@@ -78,21 +78,21 @@ function normalizePresetsList(presets: CSPPreset): CSPPresetsArray {
 /**
  * Merges presets to policy
  */
-function applyPresets(policies: CSPPolicies, presets: CSPPresetsArray): CSPPolicies {
-	let mergedPolicies: CSPPolicies = {};
+function applyPresets(directives: CSPDirectives, presets: CSPPresetsArray): CSPDirectives {
+	let mergedPolicies: CSPDirectives = {};
 
-	for (let preset of [policies, ...presets]) {
+	for (let preset of [directives, ...presets]) {
 		for (let directiveName in preset) {
 			if (!(directiveName in ALLOWED_DIRECTIVES)) {
 				continue;
 			}
 
-			directiveName as keyof CSPPolicies;
+			directiveName as keyof CSPDirectives;
 
-			let currentRules: CSPDirectiveValue = mergedPolicies[directiveName as keyof CSPPolicies];
-			let presetRules: CSPDirectiveValue = preset[directiveName as keyof CSPPolicies];
+			let currentRules: CSPDirectiveValue = mergedPolicies[directiveName as keyof CSPDirectives];
+			let presetRules: CSPDirectiveValue = preset[directiveName as keyof CSPDirectives];
 
-			(mergedPolicies[directiveName as keyof CSPPolicies] as CSPDirectiveValue) = mergeDirectiveRules(currentRules, presetRules, directiveName as keyof CSPPolicies);
+			(mergedPolicies[directiveName as keyof CSPDirectives] as CSPDirectiveValue) = mergeDirectiveRules(currentRules, presetRules, directiveName as keyof CSPDirectives);
 		}
 	}
 
@@ -193,12 +193,12 @@ export const ALLOWED_DIRECTIVES = {
 };
 
 export interface CSPHeaderParams {
-	policies?: CSPPolicies,
+	directives?: CSPDirectives,
 	presets?: CSPPreset,
 	reportUri?: string
 }
 
-export type CSPPolicies = Partial<(
+export type CSPDirectives = Partial<(
 	Record<CSPListDirectiveName, CSPListDirectiveValue> |
 	Record<CSPStringDirectiveName, CSPStringDirectiveValue> |
 	Record<CSPBooleanDirectiveName, CSPBooleanDirectiveValue>
@@ -212,5 +212,5 @@ export type CSPListDirectiveValue = string[];
 export type CSPStringDirectiveValue = string;
 export type CSPBooleanDirectiveValue = boolean;
 export type CSPPreset = CSPPresetsObject | CSPPresetsArray;
-export type CSPPresetsObject = { [presetName: string]: CSPPolicies };
-export type CSPPresetsArray = CSPPolicies[];
+export type CSPPresetsObject = { [presetName: string]: CSPDirectives };
+export type CSPPresetsArray = CSPDirectives[];
