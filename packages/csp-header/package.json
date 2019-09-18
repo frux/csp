@@ -2,11 +2,11 @@
   "name": "csp-header",
   "version": "1.3.3",
   "description": "Content-Security-Policy header generator",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "test": "jest",
-    "build": "tsc --outDir ./ ./src/index.ts"
+    "build": "tsc -p ./"
   },
   "keywords": [
     "csp",
