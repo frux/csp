@@ -1,5 +1,5 @@
 # csp-header
-Content-Security-Policy header generator for Node
+Content-Security-Policy header generator for Node.JS
 
 ## Usage
 ```js
@@ -54,7 +54,7 @@ or as a map of presets:
 ```
 
 ## Preset format
-If you have a web-service feel free to publish preset of rules for using your service. For example your service is ``my-super-service.com``. Just publish preset ``csp-preset-my-super-service`` containing following code:
+If you have a web-service feel free to publish preset of rules for using your service. For example, your service is ``my-super-service.com``. Just publish preset ``csp-preset-my-super-service`` containing following code:
 ```js
 modules.exports = {
     'script-src': ['api.my-super-service.com'],
@@ -68,13 +68,13 @@ And you'll get a lot of thanks ;)
 
 ### `policies` was renamed to `directives`
 
-### Minimal supported version of node is 8
+### Minimal supported version of Node.JS is 8
 
 ### Dropped support of `extend`
 `extend` was marked as deprecated in previous versions. It doesn't work anymore. Use `presets` instead.
 
 ### Dropped support of specifying presets as a string
-`csp-header` used to require preset if you specify it as a string. Now, please require it by yourself.
+`csp-header` used to require preset if you specify it as a string. Now, you should require it by yourself.
 Before:
 ```js
 {
@@ -90,5 +90,5 @@ Now:
 }
 ```
 
-### Calling with no arguments returns empty string
+### Calling with no arguments returns an empty string
 It used to return `undefined`.
