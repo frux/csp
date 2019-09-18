@@ -3,9 +3,9 @@ Content-Security-Policy header generator for Node.JS
 
 ## Usage
 ```js
-const csp = require('csp-header');
-csp({
-    policies: {
+const { getCSP } = require('csp-header');
+getCSP({
+    directives: {
         'script-src': [
             csp.SELF,
             csp.INLINE,
@@ -27,7 +27,7 @@ csp({
 ## Params
 ```js
 {
-    policies: { [key: string]: string[] },
+    directives: { [key: string]: string[] },
     presets: policies[] | { [key: string]: policies }
     'report-uri': string,
     extend: policies // DEPRECATED use presets instead
@@ -66,14 +66,20 @@ And you'll get a lot of thanks ;)
 
 ## BREAKING CHANGES in csp-header@2
 
-### `policies` was renamed to `directives`
+### 🔨 No default export
+For compability with JS we have to export getCSP as a named export.
+```js
+const { getCSP } = require('csp-header');
+```
 
-### Minimal supported version of Node.JS is 8
+### 🔨 `policies` was renamed to `directives`
 
-### Dropped support of `extend`
+### 🔨 Minimal supported version of Node.JS is 8
+
+### 🔨 Dropped support of `extend`
 `extend` was marked as deprecated in previous versions. It doesn't work anymore. Use `presets` instead.
 
-### Dropped support of specifying presets as a string
+### 🔨 Dropped support of specifying presets as a string
 `csp-header` used to require preset if you specify it as a string. Now, you should require it by yourself.
 Before:
 ```js
@@ -90,5 +96,5 @@ Now:
 }
 ```
 
-### Calling with no arguments returns an empty string
+### 🔨 Calling with no arguments returns an empty string
 It used to return `undefined`.

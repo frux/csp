@@ -1,4 +1,4 @@
-import getCSP, { CSPDirectiveName, CSPHeaderParams, nonce } from '../src';
+import { getCSP, CSPDirectiveName, CSPHeaderParams, nonce } from '../src';
 
 describe('Empty input', () => {
 	test('should return empty string with no args', () => {

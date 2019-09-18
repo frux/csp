@@ -20,7 +20,7 @@ export * from './constants';
 /**
  * Build CSP header value from params
  */
-export default function getCSP(params: CSPHeaderParams = {}): string {
+export function getCSP(params: CSPHeaderParams = {}): string {
 	let { directives = {}, presets = {}, reportUri } = params;
 	let presetsList = normalizePresetsList(presets);
 	let mergedPolicies = applyPresets(directives, presetsList);
