@@ -82,7 +82,7 @@ function getDirectiveString(directiveName: CSPDirectiveName, directiveValue: CSP
 	}
 
 	if (directiveName in LIST_DIRECTIVES) {
-		let valueString = (directiveValue as CSPListDirectiveValue).join(', ');
+		let valueString = (directiveValue as CSPListDirectiveValue).join(' ');
 		return `${directiveName} ${valueString};`;
 	}
 }

@@ -1,4 +1,39 @@
-import { getCSP, CSPDirectiveName, CSPHeaderParams, nonce } from '../src';
+import { getCSP, CSPDirectiveName, CSPHeaderParams, nonce, SELF } from '../src';
+
+describe('CSP building', () => {
+	test('should correctly make policy with the only rule', () => {
+		expect(getCSP({
+			directives: {
+				'script-src': ['host.com']
+			}
+		})).toBe('script-src host.com;');
+	});
+
+	test('should correctly make policy with many rules', () => {
+		expect(getCSP({
+			directives: {
+				'script-src': ['host1.com', 'host2.com', 'host3.com', 'host4.com']
+			}
+		})).toBe('script-src host1.com host2.com host3.com host4.com;');
+	});
+
+	test('should correctly make policy with constants', () => {
+		expect(getCSP({
+			directives: {
+				'script-src': [SELF, 'host.com']
+			}
+		})).toBe('script-src \'self\' host.com;');
+	});
+
+	test('should correctly make policy with many directives', () => {
+		expect(getCSP({
+			directives: {
+				'script-src': ['host1.com', 'host2.com'],
+				'style-src': ['host1.com', 'host2.com'],
+			}
+		})).toBe('script-src host1.com host2.com; style-src host1.com host2.com;');
+	});
+});
 
 describe('Empty input', () => {
 	test('should return empty string with no args', () => {
@@ -58,7 +93,7 @@ describe('Presets', () => {
 						'script-src': [ 'domain2.com' ]
 					}
 				]
-			})).toBe('script-src domain1.com, domain2.com;')
+			})).toBe('script-src domain1.com domain2.com;')
 		});
 
 		test('should work with empty policies', () => {
@@ -103,7 +138,7 @@ describe('Presets', () => {
 						'style-src': [ 'domain2.com' ]
 					}
 				]
-			})).toBe('script-src domain1.com, domain2.com; style-src domain1.com, domain2.com;')
+			})).toBe('script-src domain1.com domain2.com; style-src domain1.com domain2.com;')
 		});
 
 		test('should not mutate source policies', () => {
@@ -157,7 +192,7 @@ describe('Presets', () => {
 						'script-src': [ 'domain2.com' ]
 					}
 				}
-			})).toBe('script-src domain1.com, domain2.com;')
+			})).toBe('script-src domain1.com domain2.com;')
 		});
 
 		test('should work with empty policies', () => {
@@ -202,7 +237,7 @@ describe('Presets', () => {
 						'style-src': [ 'domain2.com' ]
 					}
 				}
-			})).toBe('script-src domain1.com, domain2.com; style-src domain1.com, domain2.com;')
+			})).toBe('script-src domain1.com domain2.com; style-src domain1.com domain2.com;')
 		});
 
 		test('should not mutate source policies', () => {
