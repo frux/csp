@@ -1,6 +1,5 @@
 # Content-Security-Policy middleware for Express
 [![Build Status](https://travis-ci.org/frux/express-csp-header.svg?branch=master)](https://travis-ci.org/frux/express-csp-header)
-[![Coverage Status](https://coveralls.io/repos/github/frux/express-csp-header/badge.svg?branch=master)](https://coveralls.io/github/frux/express-csp-header?branch=master)
 
 ## Usage
 

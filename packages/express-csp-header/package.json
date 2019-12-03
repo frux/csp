@@ -8,8 +8,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "jest --coverage && npm run coverage",
-    "coverage": "cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -31,7 +30,6 @@
   "homepage": "https://github.com/frux/express-csp#readme",
   "devDependencies": {
     "@types/express": "^4.11.0",
-    "coveralls": "^2.12.0",
     "jest": "^19.0.2"
   },
   "dependencies": {
