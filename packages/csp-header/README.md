@@ -1,5 +1,10 @@
 # csp-header
-Content-Security-Policy header generator for Node.JS
+Content-Security-Policy header generator for Node.js.
+
+## Install
+```bash
+npm install --save csp-header
+```
 
 ## Usage
 ```js
@@ -18,7 +23,7 @@ getCSP({
             'mystyle.net'
         ]
     }
-    'report-uri': 'https://cspreport.com/send'
+    reportUri: 'https://cspreport.com/send'
 });
 
 // result: "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'nonce-gg3g43#$g32gqewgaAEGeag2@#GFQ#g==' example.com; style-src 'self' mystyle.net; report-uri https://cspreport.com/send;"
@@ -29,7 +34,7 @@ getCSP({
 {
     directives: { [key: string]: string[] },
     presets: policies[] | { [key: string]: policies }
-    'report-uri': string,
+    reportUri: string,
     extend: policies // DEPRECATED use presets instead
 }
 ```
@@ -98,3 +103,6 @@ Now:
 
 ### 🔨 Calling with no arguments returns an empty string
 It used to return `undefined`.
+
+## Links
+- [express-csp-header](https://github.com/frux/express-csp-header)
