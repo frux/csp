@@ -8,18 +8,19 @@ npm install --save csp-header
 
 ## Usage
 ```js
-const { getCSP } = require('csp-header');
+const { getCSP, nonce, EVAL, INLINE, SELF } = require('csp-header');
+
 getCSP({
     directives: {
         'script-src': [
-            csp.SELF,
-            csp.INLINE,
-            csp.EVAL,
-            csp.nonce('gg3g43#$g32gqewgaAEGeag2@#GFQ#g=='),
+            SELF,
+            INLINE,
+            EVAL,
+            nonce('gg3g43#$g32gqewgaAEGeag2@#GFQ#g=='),
             'example.com'
         ],
         'style-src': [
-            csp.SELF,
+            SELF,
             'mystyle.net'
         ]
     }
