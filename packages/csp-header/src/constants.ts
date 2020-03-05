@@ -5,7 +5,7 @@ export const INLINE = "'unsafe-inline'";
 export const EVAL = "'unsafe-eval'";
 
 // script-src values
-export const STRICT_DYNAMIC = "'strict-dynamic";
+export const STRICT_DYNAMIC = "'strict-dynamic'";
 
 // referer values
 export const NO_REFERER = "'no-referer'";
