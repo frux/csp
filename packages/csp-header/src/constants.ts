@@ -3,6 +3,8 @@ export const NONE = "'none'";
 export const SELF = "'self'";
 export const INLINE = "'unsafe-inline'";
 export const EVAL = "'unsafe-eval'";
+export const DATA = 'data:';
+export const BLOB = 'blob:';
 
 // script-src values
 export const STRICT_DYNAMIC = "'strict-dynamic'";
