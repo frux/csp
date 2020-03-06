@@ -1,6 +1,6 @@
 /* global describe, test, expect */
 import { Request, Response } from 'express';
-import { expressCsp, ExpressCSPParams, SELF, INLINE, NONE, NONCE, TLD } from '../src';
+import { expressCspHeader, ExpressCSPParams, SELF, INLINE, NONE, NONCE, TLD } from '../src';
 
 function execMiddleware(params?: ExpressCSPParams, req: Partial<Request> = {}) {
 	let res = {
@@ -10,7 +10,7 @@ function execMiddleware(params?: ExpressCSPParams, req: Partial<Request> = {}) {
 		}
 	};
 
-	expressCsp(params)(req as unknown as Request, res as unknown as Response, () => {});
+	expressCspHeader(params)(req as unknown as Request, res as unknown as Response, () => {});
 
 	return { req, res };
 }

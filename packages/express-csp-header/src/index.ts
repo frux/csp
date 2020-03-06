@@ -16,7 +16,7 @@ export interface ExpressCSPParams extends Omit<CSPHeaderParams, 'reportUri'> {
     reportUri?: string | ReportUriFunction,
 }
 
-export function expressCsp(params?: ExpressCSPParams): RequestHandler {
+export function expressCspHeader(params?: ExpressCSPParams): RequestHandler {
     return function (req, res, next) {
         if (!params) {
             next();
