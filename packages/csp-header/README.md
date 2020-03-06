@@ -1,4 +1,8 @@
 # csp-header
+[![NPM version](https://img.shields.io/npm/v/csp-header.svg?style=flat)](https://www.npmjs.com/package/csp-header)
+[![NPM downloads](https://img.shields.io/npm/dm/csp-header.svg?style=flat)](https://www.npmjs.com/package/csp-header)
+[![Dependency Status](https://img.shields.io/david/frux/csp-header.svg?style=flat)](https://david-dm.org/frux/csp-header)
+
 Content-Security-Policy header generator for Node.js.
 
 ## Install
