@@ -1,17 +1,20 @@
 # Content-Security-Policy middleware for Express
-[![Build Status](https://travis-ci.org/frux/express-csp-header.svg?branch=master)](https://travis-ci.org/frux/express-csp-header)
+[![NPM version](https://img.shields.io/npm/v/express-csp-header.svg?style=flat)](https://www.npmjs.com/package/express-csp-header)
+[![NPM downloads](https://img.shields.io/npm/dm/express-csp-header.svg?style=flat)](https://www.npmjs.com/package/express-csp-header)
+[![Dependency Status](https://img.shields.io/david/frux/express-csp-header.svg?style=flat)](https://david-dm.org/frux/express-csp-header)
 
 ## Usage
 
 ```js
-const csp = require('express-csp-header');
-app.use(csp({
-    policies: {
-        'default-src': [csp.SELF],
-        'script-src': [csp.SELF, csp.INLINE, 'somehost.com'],
-        'style-src': [csp.SELF, 'mystyles.net'],
+const { expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
+
+app.use(expressCspHeader({
+    directives: {
+        'default-src': [SELF],
+        'script-src': [SELF, INLINE, 'somehost.com'],
+        'style-src': [SELF, 'mystyles.net'],
         'img-src': ['data:', 'images.com'],
-        'worker-src': [csp.NONE],
+        'worker-src': [NONE],
         'block-all-mixed-content': true
     }
 }));
@@ -21,12 +24,14 @@ app.use(csp({
 
 ### nonce parameter
 
-If you want to use nonce parameter you should use NONCE constant. Nonce key will be generated automatically. Also generated nonce key will be stored in ``req.nonce``:
+If you want to use nonce parameter you should use `NONCE` constant. Nonce key will be generated automatically. Also generated nonce key will be stored in `req.nonce`:
 
 ```js
-app.use(csp({
-    policies: {
-        'script-src': [csp.NONCE]
+const { expressCspHeader, NONCE } = require('express-csp-header');
+
+app.use(expressCspHeader({
+    directives: {
+        'script-src': [NONCE]
     }
 }));
 // express will send header with a random nonce key "Content-Security-Policy: script-src 'nonce-pSQ9TwXOMI+HezKshnuRaw==';"
@@ -38,12 +43,14 @@ app.use((req, res) => {
 
 ### Auto tld
 
-If you have more than one tlds you may want to keep current tld in your security policy. And you able to do this by replacing tld by TLD constant:
+If you have more than one tlds you may want to have only current tld in your security policy. You can do this by replacing tld by `TLD` constant:
 
 ```js
-app.use(csp({
-    policies: {
-        'script-src': [`mystatic.${csp.TLD}`]
+const { expressCspHeader, TLD } = require('express-csp-header');
+
+app.use(expressCspHeader({
+    directives: {
+        'script-src': [`mystatic.${TLD}`]
     }
 }));
 // for myhost.com it will send: "Content-Security-Policy: script-src mystatic.com;"
@@ -53,41 +60,22 @@ app.use(csp({
 
 ### TLD parsing options
 
-TLD to replace `csp.TLD` in policies is specified using `parse-domain` module. You can pass [its options](https://github.com/peerigon/parse-domain#parseoptions) into `domainOptions` parameter
+`express-csp-header` uses `parse-domain` module to replace tld. You can pass [its options](https://github.com/peerigon/parse-domain#parseoptions) into `domainOptions` parameter
 
 ```js
-app.use(csp({
-    policies: {
-        'script-src': [`mystatic.${csp.TLD}`]
+const { expressCspHeader, TLD } = require('express-csp-header');
+
+app.use(expressCspHeader({
+    directives: {
+        'script-src': [`mystatic.${TLD}`]
     },
     domainOptions: {
         customTlds: ['example.com']
     }
-}
 }));
 // for myhost.com it will send: "Content-Security-Policy: script-src mystatic.com;"
 // for myhost.example.com it will send: "Content-Security-Policy: script-src mystatic.example.com;"
 // etc
-```
-
-### Policy extending 🔥 DEPRECATED use `presets` instead🔥
-
-Sometimes you need to extend existing policies. You can do it by `extend` param:
-
-```js
-var defaultPolicies = {
-    'script-src': ['mydefaulthost.com']
-};
-
-app.use(csp({
-    policies: defaultPolicies,
-    extend: {
-        'script-src': ['myadditionalhost.com'],
-        'style-src': ['mystyles.com']
-    }
-}));
-
-// result header: 'Content-Security-Policy: script-src mydefaulthost.com myadditionalhost.com; style-src: mystyles.com;'
 ```
 
 ### Presets
@@ -99,9 +87,11 @@ Read about preset in [`csp-header` docs](https://github.com/frux/csp-header#pres
 To switch on Report-Only mode just specify `reportOnly` param:
 
 ```js
-app.use(csp({
-    policies: {
-        'script-src': [csp.SELF]
+const { expressCspHeader, SELF } = require('express-csp-header');
+
+app.use(expressCspHeader({
+    directives: {
+        'script-src': [SELF]
     },
     reportOnly: true
 }));
@@ -111,9 +101,11 @@ app.use(csp({
 ### report-uri parameter
 
 ```js
-app.use(csp({
-    policies: {
-        'script-src': [csp.SELF]
+const { expressCspHeader, SELF } = require('express-csp-header');
+
+app.use(expressCspHeader({
+    directives: {
+        'script-src': [SELF]
     },
     reportUri: 'https://cspreport.com/send'
 }));
@@ -123,13 +115,47 @@ app.use(csp({
 If you want to pass some params to the report uri just pass function instead of string:
 
 ```js
-app.use(csp({
-    policies: {
-        'script-src': [csp.SELF]
+const { expressCspHeader, SELF } = require('express-csp-header');
+
+app.use(expressCspHeader({
+    directives: {
+        'script-src': [SELF]
     },
     reportUri: (req, res) => {
         return `https://cspreport.com/send?time=${Number(new Date())}`;
     }
 }));
 // express will send header "Content-Security-Policy: script-src 'self'; report-uri https://cspreport.com/send?time=1460467355592;"
+```
+
+## BREAKING CHANGES in express-csp-header@3
+
+### 💥 No default export
+For compability with JS we have to export expressCspHeader as a named export.
+```js
+const { expressCspHeader } = require('express-csp-header');
+```
+
+### 💥 `policies` was renamed to `directives`
+
+### 💥 Minimal supported version of Node.JS is 8
+
+### 💥 Dropped support of `extend`
+`extend` was marked as deprecated in previous versions. It doesn't work anymore. Use `presets` instead.
+
+### 💥 Dropped support of specifying presets as a string
+`express-csp-header` used to require preset if you specify it as a string. Now, you should require it by yourself.
+Before:
+```js
+{
+    //...
+    presets: ['csp-preset-myservice']
+}
+```
+Now:
+```js
+{
+    //...
+    presets: [require('csp-preset-myservice')]
+}
 ```
