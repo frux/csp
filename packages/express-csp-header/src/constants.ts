@@ -1,0 +1,27 @@
+export {
+    NONE,
+    SELF,
+    INLINE,
+    EVAL,
+    DATA,
+    BLOB,
+    STRICT_DYNAMIC,
+    NO_REFERER,
+    NONE_WHEN_DOWNGRADE,
+    ORIGIN,
+    ORIGIN_WHEN_CROSS_ORIGIN,
+    UNSAFE_URL,
+    ALLOW_FORMS,
+    ALLOW_MODALS,
+    ALLOW_ORIENTATION_LOCK,
+    ALLOW_POINTER_LOCK,
+    ALLOW_POPUPS,
+    ALLOW_POPUPS_TO_ESACPE_SANDBOX,
+    ALLOW_PRESENTATION,
+    ALLOW_SAME_ORIGIN,
+    ALLOW_SCRIPTS,
+    ALLOW_TOP_NAVIGATION
+} from 'csp-header';
+
+export const NONCE = '%nonce%';
+export const TLD = '%tld%';

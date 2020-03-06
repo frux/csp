@@ -2,11 +2,8 @@
   "name": "express-csp-header",
   "version": "2.3.1",
   "description": "Content-Security-Policy middleware for Express",
-  "main": "index.js",
-  "types": "index.d.ts",
-  "directories": {
-    "test": "test"
-  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "test": "jest",
     "build": "tsc -p ./"
@@ -30,16 +27,16 @@
   },
   "homepage": "https://github.com/frux/express-csp#readme",
   "devDependencies": {
-    "@types/express": "^4.11.0",
+    "@types/express": "^4.17.3",
     "@types/jest": "^25.1.3",
     "@types/node": "^13.7.7",
-    "jest": "^19.0.2",
+    "jest": "^24.9.0",
     "ts-jest": "^25.2.1",
     "ts-node": "^8.6.2",
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "csp-header": "^1.2.0",
-    "parse-domain": "2.1.8"
+    "csp-header": "^2.1.1",
+    "parse-domain": "^2.3.4"
   }
 }
