@@ -27,7 +27,7 @@ getCSP({
             SELF,
             'mystyle.net'
         ]
-    }
+    },
     reportUri: 'https://cspreport.com/send'
 });
 
@@ -38,7 +38,7 @@ getCSP({
 ```js
 {
     directives: { [key: string]: string[] },
-    presets: policies[] | { [key: string]: policies }
+    presets: policies[] | { [key: string]: policies },
     reportUri: string,
     extend: policies // DEPRECATED use presets instead
 }
