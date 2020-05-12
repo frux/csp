@@ -2,13 +2,17 @@ import crypto from 'crypto';
 
 import { getCSP, CSPHeaderParams, nonce } from 'csp-header';
 import { RequestHandler, Request, Response } from 'express';
-import parseDomain, { ParseOptions } from 'parse-domain';
+import * as psl from 'psl';
 
 import { NONCE, TLD } from './constants';
 
 export * from './constants';
 
 type ReportUriFunction = (req: Request, res: Response) => string;
+
+export interface ParseOptions {
+	customTlds?: string[];
+}
 
 export interface ExpressCSPParams extends Omit<CSPHeaderParams, 'reportUri'> {
     domainOptions?: ParseOptions,
@@ -41,7 +45,7 @@ function getCspString(req: Request, res: Response, params: ExpressCSPParams): st
         presets,
         reportUri: typeof reportUri === 'function' ? reportUri(req, res) : reportUri
     };
-    
+
     return getCSP(cspHeaderParams);
 }
 
@@ -57,16 +61,32 @@ function applyNonce(req: Request, cspString: string): string {
 
 function applyAutoTld(req: Request, cspString: string, domainOptions?: ParseOptions): string {
     if (cspString.includes(TLD)) {
-        let domain = parseDomain(req.hostname, domainOptions);
+        let tld = parseDomain(req.hostname, domainOptions);
 
-        if (!domain || !domain.tld) {
+        if (!tld) {
             return cspString;
         }
 
-        return cspString.replace(new RegExp(TLD, 'g'), domain.tld);
+        return cspString.replace(new RegExp(TLD, 'g'), tld);
     }
 
     return cspString;
+}
+
+function parseDomain(hostname: string, domainOptions?: ParseOptions): string | null {
+	for (const tld of (domainOptions?.customTlds || [])) {
+		if (hostname.endsWith(`.${tld}`)) {
+			return tld;
+		}
+	}
+
+	let domain = psl.parse(hostname);
+
+	if (undefined !== domain.error) {
+		return null;
+	}
+
+	return domain.tld;
 }
 
 const CSP_HEADER = 'Content-Security-Policy';
