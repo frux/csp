@@ -92,7 +92,7 @@ function parseDomain(hostname: string, domainOptions?: ParseOptions): string | n
 
 	let domain = psl.parse(hostname);
 
-	if (undefined !== domain.error) {
+	if (domain.error) {
 		return null;
 	}
 
