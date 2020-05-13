@@ -11,7 +11,7 @@ export * from './constants';
 type ReportUriFunction = (req: Request, res: Response) => string;
 
 export interface ParseOptions {
-	customTlds?: string[];
+	customTlds?: string[] | RegExp;
 }
 
 export interface ExpressCSPParams extends Omit<CSPHeaderParams, 'reportUri'> {
@@ -74,9 +74,19 @@ function applyAutoTld(req: Request, cspString: string, domainOptions?: ParseOpti
 }
 
 function parseDomain(hostname: string, domainOptions?: ParseOptions): string | null {
-	for (const tld of (domainOptions?.customTlds || [])) {
-		if (hostname.endsWith(`.${tld}`)) {
-			return tld;
+	let customTlds = domainOptions?.customTlds;
+	if (customTlds instanceof RegExp) {
+		const tld = hostname.match(customTlds);
+		if (tld !== null) {
+			return tld[0].replace(/^\.+/, '');
+		}
+	}
+
+	if (Array.isArray(customTlds)) {
+		for (const tld of customTlds) {
+			if (hostname.endsWith(`.${tld}`)) {
+				return tld;
+			}
 		}
 	}
 

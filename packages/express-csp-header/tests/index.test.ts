@@ -90,14 +90,18 @@ describe('tld', () => {
 			.toStrictEqual('script-src myhost.com;');
 	});
 
-	test('should pass domainOptions to parse-domain', () => {
-		const { res } = execMiddleware(
+	test.each([
+		[['my-custom-tld.com']],
+		[/my-\w+-tld\.com$/],
+		[/\.my-\w+-tld\.com$/],
+	])("should handle domainOptions' customTlds: %p", (customTlds) => {
+		const {res} = execMiddleware(
 			{
 				directives: {
 					'script-src': ['myhost.' + TLD]
 				},
 				domainOptions: {
-					customTlds: ['my-custom-tld.com']
+					customTlds
 				}
 			},
 			{
