@@ -59,8 +59,7 @@ app.use(expressCspHeader({
 ```
 
 ### TLD parsing options
-
-`express-csp-header` uses `parse-domain` module to replace tld. You can pass [its options](https://github.com/peerigon/parse-domain#parseoptions) into `domainOptions` parameter
+`express-csp-header` uses `pls` package to parse tld for auto-tld feature. If you have a custom tld you can specify it as an array or a regexp.
 
 ```js
 const { expressCspHeader, TLD } = require('express-csp-header');
@@ -127,6 +126,10 @@ app.use(expressCspHeader({
 }));
 // express will send header "Content-Security-Policy: script-src 'self'; report-uri https://cspreport.com/send?time=1460467355592;"
 ```
+
+## BREAKING CHANGES in express-csp-header@4
+### There's no more `privateTld` option supported in domain parsing options
+We have to refuse using `parse-domain` package. Though `customTlds` were reimplented (thanks to @FauxFaux) and still working as before.
 
 ## BREAKING CHANGES in express-csp-header@3
 
