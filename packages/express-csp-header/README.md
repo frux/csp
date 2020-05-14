@@ -59,7 +59,7 @@ app.use(expressCspHeader({
 ```
 
 ### TLD parsing options
-`express-csp-header` uses `pls` package to parse tld for auto-tld feature. If you have a custom tld you can specify it as an array or a regexp.
+`express-csp-header` uses [psl](https://www.npmjs.com/package/psl) package to parse tld for auto-tld feature. If you have a custom tld you can specify it as an array or a regexp.
 
 ```js
 const { expressCspHeader, TLD } = require('express-csp-header');
