@@ -10,11 +10,16 @@ export const BLOB = 'blob:';
 export const STRICT_DYNAMIC = "'strict-dynamic'";
 
 // referer values
-export const NO_REFERER = "'no-referer'";
+export const NO_REFERRER = "'no-referrer'";
 export const NONE_WHEN_DOWNGRADE = "'none-when-downgrade'";
 export const ORIGIN = "'origin'";
 export const ORIGIN_WHEN_CROSS_ORIGIN = "'origin-when-cross-origin'";
 export const UNSAFE_URL = "'unsafe-url'";
+
+/**
+ * @deprecated
+ */
+export const NO_REFERER = NO_REFERRER;
 
 // sandbox values
 export const ALLOW_FORMS = "'allow-forms'";
