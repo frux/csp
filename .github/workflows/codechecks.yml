@@ -11,4 +11,5 @@ jobs:
         with:
           node-version: 10
       - run: npm ci
+      - run: lerna bootstrap
       - run: lerna run test
