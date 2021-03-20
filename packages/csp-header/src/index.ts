@@ -1,9 +1,6 @@
 import {
 	ALLOWED_DIRECTIVES,
-	BOOLEAN_DIRECTIVES,
-	LIST_DIRECTIVES,
-	STRING_DIRECTIVES
-} from './constants';
+} from './constants/directives';
 import {
 	CSPHeaderParams,
 	CSPDirectives,
@@ -15,7 +12,8 @@ import {
 } from './types';
 
 export * from './types';
-export * from './constants';
+export * from './constants/directives';
+export * from './constants/values';
 
 /**
  * Build CSP header value from params
@@ -39,7 +37,7 @@ export function nonce(nonceKey: string): string {
  * Build CSP header value from resolved policy
  */
 
-function policyToString(directives: CSPDirectives, reportUri?: string): string {
+function policyToString(directives: Partial<CSPDirectives>, reportUri?: string): string {
 	let cspStringParts: string[] = [];
 
 	for (let directiveName in directives) {
@@ -73,15 +71,15 @@ function getDirectiveString(directiveName: CSPDirectiveName, directiveValue: CSP
 		return '';
 	}
 
-	if (directiveName in BOOLEAN_DIRECTIVES) {
+	if (typeof directiveValue === 'boolean') {
 		return `${directiveName};`;
 	}
 
-	if (directiveName in STRING_DIRECTIVES) {
+	if (typeof directiveValue === 'string') {
 		return `${directiveName} ${directiveValue};`;
 	}
 
-	if (directiveName in LIST_DIRECTIVES) {
+	if (Array.isArray(directiveValue)) {
 		let valueString = (directiveValue as CSPListDirectiveValue).join(' ');
 		return `${directiveName} ${valueString};`;
 	}
@@ -104,8 +102,8 @@ function normalizePresetsList(presets: CSPPreset): CSPPresetsArray {
 /**
  * Merges presets to policy
  */
-function applyPresets(directives: CSPDirectives, presets: CSPPresetsArray): CSPDirectives {
-	let mergedPolicies: CSPDirectives = {};
+function applyPresets(directives: Partial<CSPDirectives>, presets: CSPPresetsArray): Partial<CSPDirectives> {
+	let mergedPolicies: Partial<CSPDirectives> = {};
 
 	for (let preset of [directives, ...presets]) {
 		for (let directiveName in preset) {
@@ -118,14 +116,14 @@ function applyPresets(directives: CSPDirectives, presets: CSPPresetsArray): CSPD
 			let currentRules: CSPDirectiveValue = mergedPolicies[directiveName as keyof CSPDirectives];
 			let presetRules: CSPDirectiveValue = preset[directiveName as keyof CSPDirectives];
 
-			(mergedPolicies[directiveName as keyof CSPDirectives] as CSPDirectiveValue) = mergeDirectiveRules(currentRules, presetRules, directiveName as keyof CSPDirectives);
+			(mergedPolicies[directiveName as keyof CSPDirectives] as CSPDirectiveValue) = mergeDirectiveRules(currentRules, presetRules);
 		}
 	}
 
 	return mergedPolicies;
 }
 
-function mergeDirectiveRules(directiveValue1: CSPDirectiveValue, directiveValue2: CSPDirectiveValue, directiveName: CSPDirectiveName): CSPDirectiveValue {
+function mergeDirectiveRules(directiveValue1: CSPDirectiveValue, directiveValue2: CSPDirectiveValue): CSPDirectiveValue {
 	if (directiveValue1 === undefined) {
 		return directiveValue2;
 	}
@@ -134,10 +132,10 @@ function mergeDirectiveRules(directiveValue1: CSPDirectiveValue, directiveValue2
 		return directiveValue1;
 	}
 
-	if (directiveName in LIST_DIRECTIVES) {
+	if (Array.isArray(directiveValue1) && Array.isArray(directiveValue2)) {
 		return getUniqRules([
-			...directiveValue1 as CSPListDirectiveValue,
-			...directiveValue2 as CSPListDirectiveValue
+			...directiveValue1,
+			...directiveValue2
 		]);
 	}
 
