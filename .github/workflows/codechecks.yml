@@ -12,5 +12,6 @@ jobs:
           node-version: 10
       - run: npm ci
       - run: lerna bootstrap
+      - run: lerna run lint --parallel
       - run: lerna run build
       - run: lerna run test --parallel

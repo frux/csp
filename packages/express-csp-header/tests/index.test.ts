@@ -1,9 +1,8 @@
-/* global describe, test, expect */
 import { Request, Response } from 'express';
 import { expressCspHeader, ExpressCSPParams, SELF, INLINE, NONE, NONCE, TLD } from '../src';
 
 function execMiddleware(params?: ExpressCSPParams, req: Partial<Request> = {}) {
-	let res = {
+	const res = {
 		headers: {} as Record<string, string>,
 		set(headerName: string, headerVal: string) {
 			this.headers[headerName] = headerVal;

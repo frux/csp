@@ -27,7 +27,7 @@ export function expressCspHeader(params?: ExpressCSPParams): RequestHandler {
 			return;
 		}
 
-		let { domainOptions } = params;
+		const { domainOptions } = params;
 		let cspString = getCspString(req, res, params);
 		cspString = applyNonce(req, cspString);
 		cspString = applyAutoTld(req, cspString, domainOptions);
@@ -39,8 +39,8 @@ export function expressCspHeader(params?: ExpressCSPParams): RequestHandler {
 }
 
 function getCspString(req: Request, res: Response, params: ExpressCSPParams): string {
-	let { directives, presets, reportUri } = params;
-	let cspHeaderParams: CSPHeaderParams = {
+	const { directives, presets, reportUri } = params;
+	const cspHeaderParams: CSPHeaderParams = {
 		directives,
 		presets,
 		reportUri: typeof reportUri === 'function' ? reportUri(req, res) : reportUri
@@ -61,7 +61,7 @@ function applyNonce(req: Request, cspString: string): string {
 
 function applyAutoTld(req: Request, cspString: string, domainOptions?: ParseOptions): string {
 	if (cspString.includes(TLD)) {
-		let tld = parseDomain(req.hostname, domainOptions);
+		const tld = parseDomain(req.hostname, domainOptions);
 
 		if (!tld) {
 			return cspString;
@@ -74,7 +74,7 @@ function applyAutoTld(req: Request, cspString: string, domainOptions?: ParseOpti
 }
 
 function parseDomain(hostname: string, domainOptions?: ParseOptions): string | null {
-	let customTlds = domainOptions?.customTlds;
+	const customTlds = domainOptions?.customTlds;
 	if (customTlds instanceof RegExp) {
 		const tld = hostname.match(customTlds);
 		if (tld !== null) {
@@ -90,7 +90,7 @@ function parseDomain(hostname: string, domainOptions?: ParseOptions): string | n
 		}
 	}
 
-	let domain = psl.parse(hostname);
+	const domain = psl.parse(hostname);
 
 	if (domain.error) {
 		return null;
@@ -103,6 +103,6 @@ const CSP_HEADER = 'Content-Security-Policy';
 const CSP_REPORT_ONLY_HEADER = 'Content-Security-Policy-Report-Only';
 
 function setHeader(res: Response, cspString: string, params: ExpressCSPParams): void {
-	let headerName = params.reportOnly ? CSP_REPORT_ONLY_HEADER : CSP_HEADER;
+	const headerName = params.reportOnly ? CSP_REPORT_ONLY_HEADER : CSP_HEADER;
 	res.set(headerName, cspString);
 }

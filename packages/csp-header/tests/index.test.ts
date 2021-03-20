@@ -142,7 +142,7 @@ describe('Presets', () => {
 		});
 
 		test('should not mutate source policies', () => {
-			let params: CSPHeaderParams = {
+			const params: CSPHeaderParams = {
 				directives: {
 					'script-src': [ 'domain1.com' ]
 				},
@@ -241,7 +241,7 @@ describe('Presets', () => {
 		});
 
 		test('should not mutate source policies', () => {
-			let params: CSPHeaderParams = {
+			const params: CSPHeaderParams = {
 				directives: {
 					'script-src': [ 'domain1.com' ]
 				},
