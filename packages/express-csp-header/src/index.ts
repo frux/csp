@@ -15,62 +15,62 @@ export interface ParseOptions {
 }
 
 export interface ExpressCSPParams extends Omit<CSPHeaderParams, 'reportUri'> {
-    domainOptions?: ParseOptions,
-    reportOnly?: boolean,
-    reportUri?: string | ReportUriFunction,
+	domainOptions?: ParseOptions,
+	reportOnly?: boolean,
+	reportUri?: string | ReportUriFunction,
 }
 
 export function expressCspHeader(params?: ExpressCSPParams): RequestHandler {
-    return function (req, res, next) {
-        if (!params) {
-            next();
-            return;
-        }
+	return function (req, res, next) {
+		if (!params) {
+			next();
+			return;
+		}
 
-        let { domainOptions } = params;
-        let cspString = getCspString(req, res, params);
-        cspString = applyNonce(req, cspString);
-        cspString = applyAutoTld(req, cspString, domainOptions);
+		let { domainOptions } = params;
+		let cspString = getCspString(req, res, params);
+		cspString = applyNonce(req, cspString);
+		cspString = applyAutoTld(req, cspString, domainOptions);
 
-        setHeader(res, cspString, params);
+		setHeader(res, cspString, params);
 
-        next();
-    };
+		next();
+	};
 }
 
 function getCspString(req: Request, res: Response, params: ExpressCSPParams): string {
-    let { directives, presets, reportUri } = params;
-    let cspHeaderParams: CSPHeaderParams = {
-        directives,
-        presets,
-        reportUri: typeof reportUri === 'function' ? reportUri(req, res) : reportUri
-    };
+	let { directives, presets, reportUri } = params;
+	let cspHeaderParams: CSPHeaderParams = {
+		directives,
+		presets,
+		reportUri: typeof reportUri === 'function' ? reportUri(req, res) : reportUri
+	};
 
-    return getCSP(cspHeaderParams);
+	return getCSP(cspHeaderParams);
 }
 
 function applyNonce(req: Request, cspString: string): string {
-    if (cspString.includes(NONCE)) {
-        req.nonce = crypto.randomBytes(16).toString('base64');
+	if (cspString.includes(NONCE)) {
+		req.nonce = crypto.randomBytes(16).toString('base64');
 
-        return cspString.replace(new RegExp(NONCE, 'g'), nonce(req.nonce));
-    }
+		return cspString.replace(new RegExp(NONCE, 'g'), nonce(req.nonce));
+	}
 
-    return cspString;
+	return cspString;
 }
 
 function applyAutoTld(req: Request, cspString: string, domainOptions?: ParseOptions): string {
-    if (cspString.includes(TLD)) {
-        let tld = parseDomain(req.hostname, domainOptions);
+	if (cspString.includes(TLD)) {
+		let tld = parseDomain(req.hostname, domainOptions);
 
-        if (!tld) {
-            return cspString;
-        }
+		if (!tld) {
+			return cspString;
+		}
 
-        return cspString.replace(new RegExp(TLD, 'g'), tld);
-    }
+		return cspString.replace(new RegExp(TLD, 'g'), tld);
+	}
 
-    return cspString;
+	return cspString;
 }
 
 function parseDomain(hostname: string, domainOptions?: ParseOptions): string | null {
@@ -103,6 +103,6 @@ const CSP_HEADER = 'Content-Security-Policy';
 const CSP_REPORT_ONLY_HEADER = 'Content-Security-Policy-Report-Only';
 
 function setHeader(res: Response, cspString: string, params: ExpressCSPParams): void {
-    let headerName = params.reportOnly ? CSP_REPORT_ONLY_HEADER : CSP_HEADER;
-    res.set(headerName, cspString);
+	let headerName = params.reportOnly ? CSP_REPORT_ONLY_HEADER : CSP_HEADER;
+	res.set(headerName, cspString);
 }
