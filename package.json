@@ -1,6 +1,9 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "build": "rm -rf ./packages/*/dist && lerna run build"
+  },
   "devDependencies": {
     "lerna": "^4.0.0"
   }
