@@ -3,6 +3,7 @@ export const NONE = "'none'";
 export const SELF = "'self'";
 export const INLINE = "'unsafe-inline'";
 export const EVAL = "'unsafe-eval'";
+export const HASHES = "'unsafe-hashes'";
 export const DATA = 'data:';
 export const BLOB = 'blob:';
 
@@ -50,7 +51,11 @@ export const LIST_DIRECTIVES = {
 	'referrer': 'referrer',
 	'sandbox': 'sandbox',
 	'script-src': 'script-src',
+	'script-src-attr': 'script-src-attr',
+	'script-src-elem': 'script-src-elem',
 	'style-src': 'style-src',
+	'style-src-elem': 'style-src-elem',
+	'style-src-attr': 'style-src-attr',
 	'worker-src': 'worker-src'
 };
 export const STRING_DIRECTIVES = {
