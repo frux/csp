@@ -11,4 +11,4 @@ jobs:
         with:
           node-version: 8
       - run: npm ci
-      - run: npm test
+      - run: lerna run test

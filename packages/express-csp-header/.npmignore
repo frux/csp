@@ -1,6 +1,0 @@
-tests
-.editorconfig
-.gitignore
-jest.config.js
-tsconfig.json
-src
