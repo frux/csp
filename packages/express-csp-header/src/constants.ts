@@ -2,6 +2,7 @@ export {
     NONE,
     SELF,
     INLINE,
+    HASHES,
     EVAL,
     DATA,
     BLOB,

@@ -37,7 +37,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
-    "csp-header": "^2.1.1",
+    "csp-header": "^2.2.0",
     "psl": "^1.8.0"
   }
 }
