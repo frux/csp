@@ -17,4 +17,4 @@ Zero-dependency library for generating CSP policies. It can be used for both HTT
 [![NPM downloads](https://img.shields.io/npm/dm/express-csp-header.svg?style=flat)](https://www.npmjs.com/package/express-csp-header)
 [![Dependency Status](https://img.shields.io/david/frux/express-csp-header.svg?style=flat)](https://david-dm.org/frux/express-csp-header)
 
-This is a `csp-header` wrapped in middleware with auto-tld support. It's ready to use in your Express application.
+This is a `csp-header` wrapped in a middleware with auto-tld support and nonce generation. It's ready to use in your Express application.
