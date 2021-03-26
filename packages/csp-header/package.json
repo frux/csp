@@ -33,10 +33,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/frux/csp-header.git"
+    "url": "git+https://github.com/frux/csp.git"
   },
   "bugs": {
-    "url": "https://github.com/frux/csp-header/issues"
+    "url": "https://github.com/frux/csp/labels/csp-header"
   },
-  "homepage": "https://github.com/frux/csp-header#readme"
+  "homepage": "https://github.com/frux/csp/tree/master/packages/csp-header#readme"
 }

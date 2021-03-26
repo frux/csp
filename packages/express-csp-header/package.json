@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/frux/express-csp.git"
+    "url": "git+https://github.com/frux/csp.git"
   },
   "keywords": [
     "csp",
@@ -24,9 +24,9 @@
     "node": ">=10"
   },
   "bugs": {
-    "url": "https://github.com/frux/express-csp/issues"
+    "url": "https://github.com/frux/csp/labels/express-csp-header"
   },
-  "homepage": "https://github.com/frux/express-csp#readme",
+  "homepage": "https://github.com/frux/csp/tree/master/packages/express-csp-header#readme",
   "devDependencies": {
     "@types/express": "4.17.11",
     "@types/jest": "26.0.21",
