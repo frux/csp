@@ -1,5 +1,6 @@
 tests
 .editorconfig
 .gitignore
+.devcontainer
 jest.config.js
 tsconfig.json
