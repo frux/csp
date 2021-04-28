@@ -74,6 +74,11 @@ modules.exports = {
 
 And you'll get a lot of thanks ;)
 
+## Community presets
+
+* [Disqus Comments (csp-preset-disqus)](https://github.com/Savjee/csp-preset-disqus)
+* [Google Analytics (csp-preset-google-analytics)](https://github.com/Savjee/csp-preset-google-analytics)
+
 ## BREAKING CHANGES in csp-header@2
 
 ### 🔨 No default export
