@@ -44,6 +44,23 @@ getCSP({
 }
 ```
 
+## CSP violation report
+There are two ways to send CSP violation report. The first is a [report-uri](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-uri) directive. Though it's supported by this library, [it's deprecated](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-uri) and should be used only for old browsers. The modern way is a [report-to](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy/report-to) directive. Note that `csp-header` only build a `Content-Security-Policy` header, so you have to manage `Report-To` header on your own. But if you use Express, there's an [express-csp-header](https://github.com/frux/csp/tree/master/packages/express-csp-header) middleware that takes care about it.
+
+```js
+const { getCSP, nonce, EVAL, INLINE, SELF } = require('csp-header');
+
+getCSP({
+    directives: {
+        'script-src': [SELF],
+        'report-to': 'my-report-group'
+    },
+    reportUri: 'https://cspreport.com/send'
+});
+
+// result: "script-src 'self'; report-uri https://cspreport.com/send; report-to: my-report-group;"
+```
+
 ## Presets
 It's a good idea to group your csp rules into presets. `csp-header` supports two ways of specifying presets. As an array of policies:
 ```js
@@ -79,40 +96,5 @@ And you'll get a lot of thanks ;)
 * [Disqus Comments (csp-preset-disqus)](https://github.com/Savjee/csp-preset-disqus)
 * [Google Analytics (csp-preset-google-analytics)](https://github.com/Savjee/csp-preset-google-analytics)
 
-## BREAKING CHANGES in csp-header@2
-
-### 🔨 No default export
-For compability with JS we have to export getCSP as a named export.
-```js
-const { getCSP } = require('csp-header');
-```
-
-### 🔨 `policies` was renamed to `directives`
-
-### 🔨 Minimal supported version of Node.JS is 8
-
-### 🔨 Dropped support of `extend`
-`extend` was marked as deprecated in previous versions. It doesn't work anymore. Use `presets` instead.
-
-### 🔨 Dropped support of specifying presets as a string
-`csp-header` used to require preset if you specify it as a string. Now, you should require it by yourself.
-Before:
-```js
-{
-    //...
-    presets: ['csp-preset-myservice']
-}
-```
-Now:
-```js
-{
-    //...
-    presets: [require('csp-preset-myservice')]
-}
-```
-
-### 🔨 Calling with no arguments returns an empty string
-It used to return `undefined`.
-
 ## Links
-- [express-csp-header](https://github.com/frux/express-csp-header)
+- [express-csp-header](https://github.com/frux/csp/tree/master/packages/express-csp-header)

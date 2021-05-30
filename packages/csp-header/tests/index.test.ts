@@ -68,6 +68,17 @@ describe('Report URI', () => {
 	});
 });
 
+describe('report-to', () => {
+	test('should add report-to to CSP string', () => {
+		expect(getCSP({
+			directives: {
+				'script-src': ['test.com'],
+				'report-to': 'my-report-group'
+			},
+		})).toBe('script-src test.com; report-to my-report-group;');
+	});
+});
+
 describe('Presets', () => {
 	describe('Array format', () => {
 		test('should add new directives', () => {

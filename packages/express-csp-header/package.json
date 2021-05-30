@@ -29,16 +29,7 @@
   "homepage": "https://github.com/frux/csp/tree/master/packages/express-csp-header#readme",
   "devDependencies": {
     "@types/express": "4.17.11",
-    "@types/jest": "26.0.21",
-    "@types/node": "14.14.35",
-    "@types/psl": "1.1.0",
-    "@typescript-eslint/eslint-plugin": "4.18.0",
-    "@typescript-eslint/parser": "4.18.0",
-    "eslint": "7.22.0",
-    "jest": "26.6.3",
-    "ts-jest": "26.5.4",
-    "ts-node": "9.1.1",
-    "typescript": "4.2.3"
+    "@types/psl": "1.1.0"
   },
   "dependencies": {
     "csp-header": "^5.0.0-beta.2",

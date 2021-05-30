@@ -3,6 +3,8 @@
 [![NPM downloads](https://img.shields.io/npm/dm/express-csp-header.svg?style=flat)](https://www.npmjs.com/package/express-csp-header)
 [![Dependency Status](https://img.shields.io/david/frux/express-csp-header.svg?style=flat)](https://david-dm.org/frux/express-csp-header)
 
+Middleware wrapper for [csp-header](https://github.com/frux/csp/tree/master/packages/csp-header), so for more information read its documentation.
+
 ## Usage
 
 ```js
@@ -77,9 +79,37 @@ app.use(expressCspHeader({
 // etc
 ```
 
+## CSP violation report
+For more information read [csp-header documentation](https://github.com/frux/csp/tree/master/packages/csp-header#csp-violation-report). `express-csp-header` helps you manage both `Content-Security-Policy` and `Report-To` headers.
+
+```js
+const { expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
+
+app.use(expressCspHeader({
+    directives: {
+        'default-src': [SELF],
+        'report-to': 'my-report-group'
+    },
+    reportUri: 'https://cspreport.com/send',
+    reportTo: [
+        {
+            group: 'my-report-group',
+            max_age: 30 * 60,
+            endpoints: [{ url: 'https://cspreport.com/send'}],
+            include_subdomains: true
+        }
+    ]
+}));
+
+/* express will send two headers
+1. Content-Security-Policy: default-src 'self'; report-to my-report-group; report-uri https://cspreport.com/send;
+2. Report-To: {"group":"my-report-group","max_age":1800,"endpoints":[{"url":"https://cspreport.com/send"}],"include_subdomains":true}
+*/
+```
+
 ### Presets
 
-Read about preset in [`csp-header` docs](https://github.com/frux/csp-header#presets)
+Read about preset in [`csp-header` docs](https://github.com/frux/csp/tree/master/packages/csp-header#presets)
 
 ### Content-Security-Policy-Report-Only mode
 
@@ -127,38 +157,5 @@ app.use(expressCspHeader({
 // express will send header "Content-Security-Policy: script-src 'self'; report-uri https://cspreport.com/send?time=1460467355592;"
 ```
 
-## BREAKING CHANGES in express-csp-header@4
-### There's no more `privateTld` option supported in domain parsing options
-We have to refuse using `parse-domain` package. Though `customTlds` were reimplented (thanks to @FauxFaux) and still working as before.
-
-## BREAKING CHANGES in express-csp-header@3
-
-### 💥 No default export
-For compability with JS we have to export expressCspHeader as a named export.
-```js
-const { expressCspHeader } = require('express-csp-header');
-```
-
-### 💥 `policies` was renamed to `directives`
-
-### 💥 Minimal supported version of Node.JS is 8
-
-### 💥 Dropped support of `extend`
-`extend` was marked as deprecated in previous versions. It doesn't work anymore. Use `presets` instead.
-
-### 💥 Dropped support of specifying presets as a string
-`express-csp-header` used to require preset if you specify it as a string. Now, you should require it by yourself.
-Before:
-```js
-{
-    //...
-    presets: ['csp-preset-myservice']
-}
-```
-Now:
-```js
-{
-    //...
-    presets: [require('csp-preset-myservice')]
-}
-```
+## Links
+- [csp-header](https://github.com/frux/csp/tree/master/packages/csp-header)

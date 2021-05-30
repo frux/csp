@@ -9,6 +9,14 @@ import { NONCE, TLD } from './constants';
 export * from './constants';
 
 type ReportUriFunction = (req: Request, res: Response) => string;
+type ReportToFunction = (req: Request, res: Response) => ReportTo[];
+
+export interface ReportTo {
+	group: string;
+	max_age: number;
+	endpoints: { url: string }[];
+	include_subdomains?: boolean;
+}
 
 export interface ParseOptions {
 	customTlds?: string[] | RegExp;
@@ -17,6 +25,7 @@ export interface ParseOptions {
 export interface ExpressCSPParams extends Omit<CSPHeaderParams, 'reportUri'> {
 	domainOptions?: ParseOptions,
 	reportOnly?: boolean,
+	reportTo?: ReportTo[] | ReportToFunction,
 	reportUri?: string | ReportUriFunction,
 }
 
@@ -32,7 +41,15 @@ export function expressCspHeader(params?: ExpressCSPParams): RequestHandler {
 		cspString = applyNonce(req, cspString);
 		cspString = applyAutoTld(req, cspString, domainOptions);
 
-		setHeader(res, cspString, params);
+		res.set(params.reportOnly ? CSP_REPORT_ONLY_HEADER : CSP_HEADER, cspString);
+
+		const reportTo = typeof params.reportTo === 'function' ?
+			params.reportTo(req, res) :
+			params.reportTo;
+
+		if (reportTo) {
+			res.set(REPORT_TO_HEADER, reportTo.map(group => JSON.stringify(group)).join(','));
+		}
 
 		next();
 	};
@@ -101,8 +118,4 @@ function parseDomain(hostname: string, domainOptions?: ParseOptions): string | n
 
 const CSP_HEADER = 'Content-Security-Policy';
 const CSP_REPORT_ONLY_HEADER = 'Content-Security-Policy-Report-Only';
-
-function setHeader(res: Response, cspString: string, params: ExpressCSPParams): void {
-	const headerName = params.reportOnly ? CSP_REPORT_ONLY_HEADER : CSP_HEADER;
-	res.set(headerName, cspString);
-}
+const REPORT_TO_HEADER = 'Report-To';
