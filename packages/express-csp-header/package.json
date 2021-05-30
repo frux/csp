@@ -1,6 +1,6 @@
 {
   "name": "express-csp-header",
-  "version": "5.0.0-beta.2",
+  "version": "5.0.0",
   "description": "Content-Security-Policy middleware for Express",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -32,7 +32,7 @@
     "@types/psl": "1.1.0"
   },
   "dependencies": {
-    "csp-header": "^5.0.0-beta.2",
+    "csp-header": "^5.0.0",
     "psl": "1.8.0"
   }
 }
