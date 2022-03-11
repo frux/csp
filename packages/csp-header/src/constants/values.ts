@@ -5,7 +5,11 @@ export const ALLOW_MODALS = "allow-modals";
 export const ALLOW_ORIENTATION_LOCK = "allow-orientation-lock";
 export const ALLOW_POINTER_LOCK = "allow-pointer-lock";
 export const ALLOW_POPUPS = "allow-popups";
-export const ALLOW_POPUPS_TO_ESACPE_SANDBOX = "allow-popups-to-escape-sandbox";
+export const ALLOW_POPUPS_TO_ESCAPE_SANDBOX = "allow-popups-to-escape-sandbox";
+/**
+ * @deprecated
+ */
+export const ALLOW_POPUPS_TO_ESACPE_SANDBOX = ALLOW_POPUPS_TO_ESCAPE_SANDBOX;
 export const ALLOW_PRESENTATION = "allow-presentation";
 export const ALLOW_SAME_ORIGIN = "allow-same-origin";
 export const ALLOW_STORAGE_ACCESS_BY_USER_ACTIVATION = "allow-storage-access-by-user-activation";
