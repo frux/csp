@@ -6,7 +6,7 @@ import {
 	ALLOW_ORIENTATION_LOCK,
 	ALLOW_POINTER_LOCK,
 	ALLOW_POPUPS,
-	ALLOW_POPUPS_TO_ESACPE_SANDBOX,
+	ALLOW_POPUPS_TO_ESCAPE_SANDBOX,
 	ALLOW_PRESENTATION,
 	ALLOW_SAME_ORIGIN,
 	ALLOW_STORAGE_ACCESS_BY_USER_ACTIVATION,
@@ -48,7 +48,7 @@ export type CSPPresetsArray = Partial<CSPDirectives>[];
 
 type TSource = string;
 type TNonce = `nonce-${string}`;
-type THash = `sha-${string}`;
+type THash = `sha${'256' | '384' | '512'}-${string}`;
 type TMimeType = `${string}/${string}`;
 
 type TFetchDirective = TSource |
@@ -111,7 +111,7 @@ export type CSPDirectives = {
 		typeof ALLOW_ORIENTATION_LOCK |
 		typeof ALLOW_POINTER_LOCK |
 		typeof ALLOW_POPUPS |
-		typeof ALLOW_POPUPS_TO_ESACPE_SANDBOX |
+		typeof ALLOW_POPUPS_TO_ESCAPE_SANDBOX |
 		typeof ALLOW_PRESENTATION |
 		typeof ALLOW_SAME_ORIGIN |
 		typeof ALLOW_SCRIPTS |
