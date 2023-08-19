@@ -29,5 +29,6 @@ export const ALLOWED_DIRECTIVES = {
 	'style-src-elem': 'style-src-elem',
 	'trusted-types': 'trusted-types',
 	'upgrade-insecure-requests': 'upgrade-insecure-requests',
+	'webrtc': 'webrtc',
 	'worker-src': 'worker-src',
 };

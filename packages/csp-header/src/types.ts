@@ -25,6 +25,10 @@ import {
 	UNSAFE_HASHES,
 	UNSAFE_INLINE,
 	UNSAFE_URL,
+    ALLOW,
+    BLOCK,
+    REPORT_SAMPLE,
+    WASM_UNSAFE_EVAL,
 } from './constants/values';
 
 export interface CSPHeaderParams {
@@ -60,6 +64,11 @@ type TFetchDirective = TSource |
 	typeof UNSAFE_HASHES |
 	typeof UNSAFE_INLINE;
 
+type TAttrDirective = THash |
+	typeof NONE |
+	typeof UNSAFE_INLINE |
+	typeof UNSAFE_HASHES;
+
 type TDocumentDirective = TSource |
 	TNonce |
 	THash |
@@ -78,6 +87,8 @@ type TNavigationDirective = TSource |
 	typeof UNSAFE_HASHES |
 	typeof UNSAFE_INLINE |
 	typeof STRICT_DYNAMIC;
+
+type TWebRTCDirective = typeof ALLOW | typeof BLOCK;
 
 export type CSPDirectives = {
 	'base-uri': (TDocumentDirective | typeof STRICT_DYNAMIC)[],
@@ -118,13 +129,14 @@ export type CSPDirectives = {
 		typeof ALLOW_STORAGE_ACCESS_BY_USER_ACTIVATION |
 		typeof ALLOW_TOP_NAVIGATION |
 		typeof ALLOW_TOP_NAVIGATION_BY_USER_ACTIVATION)[],
-	'script-src': (TFetchDirective | typeof STRICT_DYNAMIC)[],
-	'script-src-attr': (TFetchDirective | typeof STRICT_DYNAMIC)[],
-	'script-src-elem': (TFetchDirective | typeof STRICT_DYNAMIC)[],
-	'style-src': TFetchDirective[],
-	'style-src-attr': TFetchDirective[],
-	'style-src-elem': TFetchDirective[],
+	'script-src': (TFetchDirective | typeof STRICT_DYNAMIC | typeof REPORT_SAMPLE | typeof WASM_UNSAFE_EVAL)[],
+	'script-src-attr': (TAttrDirective | typeof REPORT_SAMPLE)[],
+	'script-src-elem': (TFetchDirective | typeof STRICT_DYNAMIC | typeof REPORT_SAMPLE)[],
+	'style-src': (TFetchDirective[] | typeof REPORT_SAMPLE),
+	'style-src-attr': (TAttrDirective | typeof REPORT_SAMPLE)[],
+	'style-src-elem': (TFetchDirective | typeof REPORT_SAMPLE)[],
 	'trusted-types': (string | typeof NONE | typeof ALLOW_DUPLICATES)[],
 	'upgrade-insecure-requests': boolean,
 	'worker-src': TFetchDirective[],
+	'webrtc': TWebRTCDirective,
 };
