@@ -1,4 +1,4 @@
-import { getCSP, CSPDirectiveName, CSPHeaderParams, nonce, SELF } from '../src';
+import {CSPDirectiveName, CSPHeaderParams, getCSP, nonce, NONE, SELF} from '../src';
 
 describe('CSP building', () => {
 	test('should correctly make policy with the only rule', () => {
@@ -107,6 +107,32 @@ describe('Presets', () => {
 			})).toBe('script-src domain1.com domain2.com;')
 		});
 
+		test('should remove \'none\' directive when merging with well-defined directive', () => {
+			expect(getCSP({
+				directives: {
+					'script-src': [ 'domain1.com' ]
+				},
+				presets: [
+					{
+						'script-src': [ NONE ]
+					}
+				]
+			})).toBe('script-src domain1.com;')
+		});
+
+		test('should remove \'none\' directive when merging with well-defined preset', () => {
+			expect(getCSP({
+				directives: {
+					'script-src': [ NONE ]
+				},
+				presets: [
+					{
+						'script-src': [ 'domain2.com' ]
+					}
+				]
+			})).toBe('script-src domain2.com;')
+		});
+
 		test('should work with empty policies', () => {
 			expect(getCSP({
 				directives: {},
@@ -204,6 +230,32 @@ describe('Presets', () => {
 					}
 				}
 			})).toBe('script-src domain1.com domain2.com;')
+		});
+
+		test('should remove \'none\' directive when merging with well-defined directive', () => {
+			expect(getCSP({
+				directives: {
+					'script-src': [ 'domain1.com' ]
+				},
+				presets: {
+					myPreset: {
+						'script-src': [ NONE ]
+					}
+				}
+			})).toBe('script-src domain1.com;')
+		});
+
+		test('should remove \'none\' directive when merging with well-defined preset', () => {
+			expect(getCSP({
+				directives: {
+					'script-src': [ NONE ]
+				},
+				presets: {
+					myPreset: {
+						'script-src': [ 'domain2.com' ]
+					}
+				}
+			})).toBe('script-src domain2.com;')
 		});
 
 		test('should work with empty policies', () => {
