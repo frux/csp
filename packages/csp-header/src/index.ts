@@ -2,6 +2,9 @@ import {
 	ALLOWED_DIRECTIVES,
 } from './constants/directives';
 import {
+	NONE
+} from './constants/values';
+import {
 	CSPHeaderParams,
 	CSPDirectives,
 	CSPDirectiveName,
@@ -138,10 +141,18 @@ function mergeDirectiveRules(directiveValue1: CSPDirectiveValue = '', directiveV
 	}
 
 	if (Array.isArray(directiveValue1) && Array.isArray(directiveValue2)) {
-		return getUniqRules([
+		const uniqRules =  getUniqRules([
 			...directiveValue1,
 			...directiveValue2
 		]);
+
+		const noneIndex = uniqRules.indexOf(NONE);
+		// Remove "'none'" if there are other rules
+		if(noneIndex >= 0 && uniqRules.length > 1) {
+			uniqRules.splice(noneIndex, 1);
+		}
+
+		return uniqRules;
 	}
 
 	return directiveValue2;
