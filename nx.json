@@ -11,5 +11,10 @@
       "dependsOn": ["build"]
     }
   },
+  "release": {
+    "version": {
+      "preVersionCommand": "npm run clean && npx nx run-many -t build"
+    }
+  },
   "defaultBase": "master"
 }
