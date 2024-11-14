@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc -p ./",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,7 @@
   "author": "frux",
   "license": "WTFPL",
   "engines": {
-    "node": ">=10"
+    "node": ">=18"
   },
   "bugs": {
     "url": "https://github.com/frux/csp/labels/express-csp-header"

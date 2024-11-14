@@ -1,7 +1,7 @@
-import crypto from 'crypto';
+import { randomBytes } from 'crypto';
 
 import { getCSP, CSPHeaderParams, nonce } from 'csp-header';
-import { RequestHandler, Request, Response } from 'express';
+import type { RequestHandler, Request, Response } from 'express';
 import * as psl from 'psl';
 
 import { NONCE, TLD } from './constants';
@@ -68,7 +68,7 @@ function getCspString(req: Request, res: Response, params: ExpressCSPParams): st
 
 function applyNonce(req: Request, cspString: string): string {
 	if (cspString.includes(NONCE)) {
-		req.nonce = crypto.randomBytes(16).toString('base64');
+		req.nonce = randomBytes(16).toString('base64');
 
 		return cspString.replace(new RegExp(NONCE, 'g'), nonce(req.nonce));
 	}

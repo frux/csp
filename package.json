@@ -1,18 +1,23 @@
 {
-  "name": "root",
+  "name": "csp",
   "private": true,
+  "workspaces": [
+    "./packages/*"
+  ],
   "scripts": {
-    "build": "rm -rf ./packages/*/dist && lerna run build",
-    "lint": "FORCE_COLOR=1 lerna run lint --parallel",
-    "test": "FORCE_COLOR=1 lerna run test --parallel"
+    "clean": "rm -rf ./packages/*/dist ./packages/*/tsconfig.tsbuildinfo",
+    "build": "nx run-many -t build",
+    "lint": "nx run-many -t lint",
+    "test": "nx run-many -t test"
   },
   "devDependencies": {
+    "@jest/globals": "^29.7.0",
+    "@nx/js": "^20.1.0",
     "@types/jest": "26.0.21",
-    "@typescript-eslint/eslint-plugin": "4.18.0",
-    "@typescript-eslint/parser": "4.18.0",
-    "eslint": "7.22.0",
+    "@types/node": "^22.8.6",
+    "eslint": "^9.14.0",
     "jest": "^29.7.0",
-    "lerna": "^8.1.9",
+    "nx": "20.1.0",
     "ts-jest": "^29.2.5",
     "typescript": "^5.6.3"
   }

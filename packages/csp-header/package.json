@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest",
     "build": "tsc -p ./",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint"
   },
   "keywords": [
     "csp",
@@ -18,7 +18,7 @@
   "author": "frux",
   "license": "WTFPL",
   "engines": {
-    "node": ">=10"
+    "node": ">=18"
   },
   "repository": {
     "type": "git",

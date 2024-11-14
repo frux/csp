@@ -1,0 +1,15 @@
+{
+  "$schema": "./node_modules/nx/schemas/nx-schema.json",
+  "targetDefaults": {
+    "build": {
+      "dependsOn": ["^build"]
+    },
+    "express-csp-header": {
+      "dependsOn": ["csp-header:build"]
+    },
+    "test": {
+      "dependsOn": ["build"]
+    }
+  },
+  "defaultBase": "master"
+}

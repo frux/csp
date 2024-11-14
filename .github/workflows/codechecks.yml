@@ -9,9 +9,6 @@ jobs:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
-          node-version: 10
+          node-version: 18
       - run: npm ci
-      - run: lerna bootstrap
-      - run: lerna run build
-      - run: npm run lint
-      - run: npm test
+      - run: npx nx run-many -t test lint

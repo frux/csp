@@ -1,16 +1,12 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "es2017",
-    "module": "commonjs",
-    "lib": ["es2017"],
-    "declaration": true,
-    "sourceMap": true,
-    "strictNullChecks": true,
-    "noImplicitAny": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "esModuleInterop": true,
-    "outDir": "./dist",
+    "composite": true,
+    "outDir": "dist",
+    "rootDir": "src"
   },
-  "include": ["src/**/*", "@types/express-csp-header/index.d.ts"]
+  "include": ["src/**/*"],
+  "references": [
+    { "path": "../csp-header" }
+  ]
 }

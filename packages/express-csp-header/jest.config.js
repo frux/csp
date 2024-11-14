@@ -1,4 +1,9 @@
+// @ts-check
+
+/**
+ * @type {import('jest').Config}
+ */
 module.exports = {
-	roots: ['<rootDir>'],
-	preset: '../../jest.config.js',
+	...require('../../jest.config'),
+	displayName: 'express-csp-header',
 }

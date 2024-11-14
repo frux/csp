@@ -45,7 +45,12 @@ function policyToString(directives: Partial<CSPDirectives>, reportUri?: string):
 			continue;
 		}
 
-		const directiveValue: CSPDirectiveValue = directives[directiveName as keyof CSPDirectives];
+		const directiveValue = directives[directiveName as keyof CSPDirectives];
+
+		if (!directiveValue) {
+			continue;
+		}
+
 		const directiveRulesString = getDirectiveString(
 			directiveName as CSPDirectiveName,
 			directiveValue
@@ -67,10 +72,6 @@ function policyToString(directives: Partial<CSPDirectives>, reportUri?: string):
  * Build directive rules part of CSP header value
  */
 function getDirectiveString(directiveName: CSPDirectiveName, directiveValue: CSPDirectiveValue): string {
-	if (!directiveValue) {
-		return '';
-	}
-
 	if (typeof directiveValue === 'boolean') {
 		return `${directiveName};`;
 	}
@@ -83,6 +84,8 @@ function getDirectiveString(directiveName: CSPDirectiveName, directiveValue: CSP
 		const valueString = (directiveValue as CSPListDirectiveValue).join(' ');
 		return `${directiveName} ${valueString};`;
 	}
+
+	return '';
 }
 
 /**
@@ -111,10 +114,12 @@ function applyPresets(directives: Partial<CSPDirectives>, presets: CSPPresetsArr
 				continue;
 			}
 
-			directiveName as keyof CSPDirectives;
+			const currentRules = mergedPolicies[directiveName as keyof CSPDirectives];
+			const presetRules = preset[directiveName as keyof CSPDirectives];
 
-			const currentRules: CSPDirectiveValue = mergedPolicies[directiveName as keyof CSPDirectives];
-			const presetRules: CSPDirectiveValue = preset[directiveName as keyof CSPDirectives];
+			if (presetRules === undefined) {
+				continue;
+			}
 
 			(mergedPolicies[directiveName as keyof CSPDirectives] as CSPDirectiveValue) = mergeDirectiveRules(currentRules, presetRules);
 		}
@@ -123,7 +128,7 @@ function applyPresets(directives: Partial<CSPDirectives>, presets: CSPPresetsArr
 	return mergedPolicies;
 }
 
-function mergeDirectiveRules(directiveValue1: CSPDirectiveValue, directiveValue2: CSPDirectiveValue): CSPDirectiveValue {
+function mergeDirectiveRules(directiveValue1: CSPDirectiveValue = '', directiveValue2: CSPDirectiveValue = ''): CSPDirectiveValue {
 	if (directiveValue1 === undefined) {
 		return directiveValue2;
 	}
