@@ -11,6 +11,11 @@ export * from './constants';
 type ReportUriFunction = (req: Request, res: Response) => string;
 type ReportToFunction = (req: Request, res: Response) => ReportTo[];
 
+export interface ReportingEndpoint {
+	name: string;
+	uri: string;
+}
+
 export interface ReportTo {
 	group: string;
 	max_age: number;
@@ -27,10 +32,11 @@ export interface ExpressCSPParams extends Omit<CSPHeaderParams, 'reportUri'> {
 	reportOnly?: boolean,
 	reportTo?: ReportTo[] | ReportToFunction,
 	reportUri?: string | ReportUriFunction,
+	reportingEndpoints?: ReportingEndpoint[] | ((req: Request, res: Response) => ReportingEndpoint[]),
 }
 
 export function expressCspHeader(params?: ExpressCSPParams): RequestHandler {
-	return function (req, res, next) {
+	return function (req: Request, res: Response, next) {
 		if (!params) {
 			next();
 			return;
@@ -49,6 +55,17 @@ export function expressCspHeader(params?: ExpressCSPParams): RequestHandler {
 
 		if (reportTo) {
 			res.set(REPORT_TO_HEADER, reportTo.map(group => JSON.stringify(group)).join(','));
+		}
+
+		const reportingEndpoints = typeof params.reportingEndpoints === 'function' ?
+			params.reportingEndpoints(req, res) :
+			params.reportingEndpoints;
+
+		if (reportingEndpoints) {
+			const endpointsString = reportingEndpoints
+				.map((endpoint) => `${endpoint.name}="${encodeURI(endpoint.uri)}"`)
+				.join(', ');
+			res.set(REPORTING_ENDPOINTS_HEADER, endpointsString);
 		}
 
 		next();
@@ -119,3 +136,4 @@ function parseDomain(hostname: string, domainOptions?: ParseOptions): string | n
 const CSP_HEADER = 'Content-Security-Policy';
 const CSP_REPORT_ONLY_HEADER = 'Content-Security-Policy-Report-Only';
 const REPORT_TO_HEADER = 'Report-To';
+const REPORTING_ENDPOINTS_HEADER = 'Reporting-Endpoints';
