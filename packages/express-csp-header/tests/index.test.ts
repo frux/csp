@@ -4,6 +4,7 @@ import { expressCspHeader, ExpressCSPParams, SELF, INLINE, NONE, NONCE, TLD } fr
 function execMiddleware(params?: ExpressCSPParams, req: Partial<Request> = {}) {
 	const res = {
 		headers: {} as Record<string, string>,
+		locals: {} as Record<string, string>,
 		set(headerName: string, headerVal: string) {
 			this.headers[headerName] = headerVal;
 		}
@@ -36,15 +37,17 @@ test('should not set header with no params', () => {
 	expect(res.headers['Content-Security-Policy']).toStrictEqual(undefined);
 });
 
-test('should set req.nonce', () => {
-	const { req, res} = execMiddleware({
+test('should set req.nonce and res.locals.nonce', () => {
+	const { req, res } = execMiddleware({
 		directives: {
 			'script-src': [NONCE]
 		}
 	});
 
-	expect(res.headers['Content-Security-Policy']).toMatch(/^script-src 'nonce-.+';/);
+	expect(res.locals).toHaveProperty('nonce');
 	expect(req).toHaveProperty('nonce');
+	expect(req.nonce).toEqual(res.locals.nonce);
+	expect(res.headers['Content-Security-Policy']).toMatch(new RegExp(`^script-src \'nonce-${req.nonce}\';`));
 });
 
 describe('report-uri', () => {
