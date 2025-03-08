@@ -80,7 +80,7 @@ app.use(expressCspHeader({
 ```
 
 ## CSP violation report
-For more information read [csp-header documentation](https://github.com/frux/csp/tree/master/packages/csp-header#csp-violation-report). `express-csp-header` helps you manage both `Content-Security-Policy` and `Report-To` headers.
+For more information read [csp-header documentation](https://github.com/frux/csp/tree/master/packages/csp-header#csp-violation-report). `express-csp-header` helps you manage both `Content-Security-Policy` and `Reporting-Endpoints` headers. [Report-to headers  is no longer recommended to use](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Report-To)
 
 ```js
 const { expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
@@ -88,22 +88,17 @@ const { expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
 app.use(expressCspHeader({
     directives: {
         'default-src': [SELF],
-        'report-to': 'my-report-group'
+        'report-to': 'csp-default'
     },
     reportUri: 'https://cspreport.com/send',
-    reportTo: [
-        {
-            group: 'my-report-group',
-            max_age: 30 * 60,
-            endpoints: [{ url: 'https://cspreport.com/send'}],
-            include_subdomains: true
-        }
-    ]
+    reportingEndpoints: [
+        {'csp-default': 'https://cspreport.com/send'}
+    ]  
 }));
 
 /* express will send two headers
-1. Content-Security-Policy: default-src 'self'; report-to my-report-group; report-uri https://cspreport.com/send;
-2. Report-To: {"group":"my-report-group","max_age":1800,"endpoints":[{"url":"https://cspreport.com/send"}],"include_subdomains":true}
+1. Content-Security-Policy: default-src 'self'; report-to csp-default; report-uri https://cspreport.com/send;
+2. Reporting-Endpoints: csp-default="https://cspreport.com/send"
 */
 ```
 

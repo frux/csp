@@ -223,3 +223,85 @@ describe('Report-To', () => {
 		);
 	});
 });
+
+describe('Reporting-Endpoints', () => {
+	test('should set Reporting-Endpoints header with static endpoints', () => {
+		const { res } = execMiddleware({
+			directives: {
+				'default-src': [SELF],
+				'report-to': 'csp-endpoint'
+			},
+			reportingEndpoints: [
+				{ name: 'endpoint-1', uri: 'https://reports.example/main' },
+				{ name: 'csp-endpoint', uri: 'https://reports.example/csp' }
+			]
+		});
+		expect(res.headers['Content-Security-Policy']).toEqual(
+			"default-src 'self'; report-to csp-endpoint;"
+		);
+		expect(res.headers['Reporting-Endpoints']).toEqual(
+			'endpoint-1="https://reports.example/main", csp-endpoint="https://reports.example/csp"'
+		);
+	});
+
+	test('should support specifying reporting endpoints as a function', () => {
+		const { res } = execMiddleware({
+			directives: {
+				'default-src': [SELF],
+			},
+			reportingEndpoints: (req) => [
+				{ name: 'main', uri: `https://reports.example/${req.hostname}/main` },
+				{ name: 'csp', uri: `https://reports.example/${req.hostname}/csp` }
+			]
+		}, { hostname: 'test.com' });
+
+		expect(res.headers['Content-Security-Policy']).toEqual(
+			"default-src 'self';"
+		);
+		expect(res.headers['Reporting-Endpoints']).toEqual(
+			'main="https://reports.example/test.com/main", csp="https://reports.example/test.com/csp"'
+		);
+	});
+	test('should support specifying reporting endpoints as a function with special characters', () => {
+		const { res } = execMiddleware({
+			directives: {
+				'default-src': [SELF],
+			},
+			reportingEndpoints: (req) => [
+				{ name: 'csp-reports', uri: `https://reports.example/${req.headers.login}/csp` }
+			]
+		}, { headers: {'login':'Abobus"\' Test' }});
+
+		expect(res.headers['Content-Security-Policy']).toEqual(
+			"default-src 'self';"
+		);
+		expect(res.headers['Reporting-Endpoints']).toEqual(
+			'csp-reports="https://reports.example/Abobus%22\'%20Test/csp"'
+		);
+	});
+
+	test('should work together with Report-To header', () => {
+		const { res } = execMiddleware({
+			directives: {
+				'default-src': [SELF],
+				'report-to': 'my-report-group'
+			},
+			reportTo: [{
+				group: 'my-report-group',
+				max_age: 1800,
+				endpoints: [{ url: 'https://reports.example/report-to' }],
+				include_subdomains: true
+			}],
+			reportingEndpoints: [
+				{ name: 'endpoint-1', uri: 'https://reports.example/endpoints' }
+			]
+		});
+
+		expect(res.headers['Report-To']).toEqual(
+			'{"group":"my-report-group","max_age":1800,"endpoints":[{"url":"https://reports.example/report-to"}],"include_subdomains":true}'
+		);
+		expect(res.headers['Reporting-Endpoints']).toEqual(
+			'endpoint-1="https://reports.example/endpoints"'
+		);
+	});
+});
