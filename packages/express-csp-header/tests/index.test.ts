@@ -47,7 +47,7 @@ test('should set req.nonce and res.locals.nonce', () => {
 	expect(res.locals).toHaveProperty('nonce');
 	expect(req).toHaveProperty('nonce');
 	expect(req.nonce).toEqual(res.locals.nonce);
-	expect(res.headers['Content-Security-Policy']).toMatch(new RegExp(`^script-src \'nonce-${req.nonce}\';`));
+	expect(res.headers['Content-Security-Policy']).toEqual(`script-src \'nonce-${req.nonce}\';`);
 });
 
 describe('report-uri', () => {
