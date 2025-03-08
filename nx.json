@@ -13,7 +13,8 @@
   },
   "release": {
     "version": {
-      "preVersionCommand": "npm run clean && npx nx run-many -t build"
+      "preVersionCommand": "npm run clean && npx nx run-many -t build",
+      "conventionalCommits": true
     }
   },
   "defaultBase": "master"
