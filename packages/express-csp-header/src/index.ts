@@ -44,7 +44,7 @@ export function expressCspHeader(params?: ExpressCSPParams): RequestHandler {
 
 		const { domainOptions } = params;
 		let cspString = getCspString(req, res, params);
-		cspString = applyNonce(req, cspString);
+		cspString = applyNonce(req ,res, cspString);
 		cspString = applyAutoTld(req, cspString, domainOptions);
 
 		res.set(params.reportOnly ? CSP_REPORT_ONLY_HEADER : CSP_HEADER, cspString);
@@ -83,11 +83,13 @@ function getCspString(req: Request, res: Response, params: ExpressCSPParams): st
 	return getCSP(cspHeaderParams);
 }
 
-function applyNonce(req: Request, cspString: string): string {
+function applyNonce(req: Request, res: Response, cspString: string): string {
 	if (cspString.includes(NONCE)) {
-		req.nonce = randomBytes(16).toString('base64');
+		const nonceValue = randomBytes(16).toString('base64');
+		req.nonce = nonceValue;
+		res.locals.nonce = nonceValue;
 
-		return cspString.replace(new RegExp(NONCE, 'g'), nonce(req.nonce));
+		return cspString.replace(new RegExp(NONCE, 'g'), nonce(nonceValue));
 	}
 
 	return cspString;
