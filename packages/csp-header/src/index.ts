@@ -1,9 +1,5 @@
-import {
-	ALLOWED_DIRECTIVES,
-} from './constants/directives';
-import {
-	NONE
-} from './constants/values';
+import { ALLOWED_DIRECTIVES } from "./constants/directives";
+import { NONE } from "./constants/values";
 import {
 	CSPHeaderParams,
 	CSPDirectives,
@@ -11,12 +7,12 @@ import {
 	CSPDirectiveValue,
 	CSPPreset,
 	CSPPresetsArray,
-	CSPListDirectiveValue
-} from './types';
+	CSPListDirectiveValue,
+} from "./types";
 
-export * from './types';
-export * from './constants/directives';
-export * from './constants/values';
+export * from "./types";
+export * from "./constants/directives";
+export * from "./constants/values";
 
 /**
  * Build CSP header value from params
@@ -40,7 +36,10 @@ export function nonce(nonceKey: string): string {
  * Build CSP header value from resolved policy
  */
 
-function policyToString(directives: Partial<CSPDirectives>, reportUri?: string): string {
+function policyToString(
+	directives: Partial<CSPDirectives>,
+	reportUri?: string
+): string {
 	const cspStringParts: string[] = [];
 
 	for (const directiveName in directives) {
@@ -68,27 +67,32 @@ function policyToString(directives: Partial<CSPDirectives>, reportUri?: string):
 		cspStringParts.push(getReportUriDirective(reportUri));
 	}
 
-	return cspStringParts.join(' ');
+	return cspStringParts.join(" ");
 }
 
 /**
  * Build directive rules part of CSP header value
  */
-function getDirectiveString(directiveName: CSPDirectiveName, directiveValue: CSPDirectiveValue): string {
-	if (typeof directiveValue === 'boolean') {
+function getDirectiveString(
+	directiveName: CSPDirectiveName,
+	directiveValue: CSPDirectiveValue
+): string {
+	if (typeof directiveValue === "boolean") {
 		return `${directiveName};`;
 	}
 
-	if (typeof directiveValue === 'string') {
+	if (typeof directiveValue === "string") {
 		return `${directiveName} ${directiveValue};`;
 	}
 
 	if (Array.isArray(directiveValue)) {
-		const valueString = (directiveValue as CSPListDirectiveValue).filter(Boolean).join(' ');
+		const valueString = (directiveValue as CSPListDirectiveValue)
+			.filter(Boolean)
+			.join(" ");
 		return `${directiveName} ${valueString};`;
 	}
 
-	return '';
+	return "";
 }
 
 /**
@@ -108,7 +112,10 @@ function normalizePresetsList(presets: CSPPreset): CSPPresetsArray {
 /**
  * Merges presets to policy
  */
-function applyPresets(directives: Partial<CSPDirectives>, presets: CSPPresetsArray): Partial<CSPDirectives> {
+function applyPresets(
+	directives: Partial<CSPDirectives>,
+	presets: CSPPresetsArray
+): Partial<CSPDirectives> {
 	const mergedPolicies: Partial<CSPDirectives> = {};
 
 	for (const preset of [directives, ...presets]) {
@@ -117,21 +124,30 @@ function applyPresets(directives: Partial<CSPDirectives>, presets: CSPPresetsArr
 				continue;
 			}
 
-			const currentRules = mergedPolicies[directiveName as keyof CSPDirectives];
+			const currentRules =
+				mergedPolicies[directiveName as keyof CSPDirectives];
 			const presetRules = preset[directiveName as keyof CSPDirectives];
 
 			if (presetRules === undefined) {
 				continue;
 			}
 
-			(mergedPolicies[directiveName as keyof CSPDirectives] as CSPDirectiveValue) = mergeDirectiveRules(currentRules, presetRules);
+			(mergedPolicies[
+				directiveName as keyof CSPDirectives
+			] as CSPDirectiveValue) = mergeDirectiveRules(
+				currentRules,
+				presetRules
+			);
 		}
 	}
 
 	return mergedPolicies;
 }
 
-function mergeDirectiveRules(directiveValue1: CSPDirectiveValue = '', directiveValue2: CSPDirectiveValue = ''): CSPDirectiveValue {
+function mergeDirectiveRules(
+	directiveValue1: CSPDirectiveValue = "",
+	directiveValue2: CSPDirectiveValue = ""
+): CSPDirectiveValue {
 	if (directiveValue1 === undefined) {
 		return directiveValue2;
 	}
@@ -141,14 +157,14 @@ function mergeDirectiveRules(directiveValue1: CSPDirectiveValue = '', directiveV
 	}
 
 	if (Array.isArray(directiveValue1) && Array.isArray(directiveValue2)) {
-		const uniqRules =  getUniqRules([
+		const uniqRules = getUniqRules([
 			...directiveValue1,
-			...directiveValue2
+			...directiveValue2,
 		]);
 
 		const noneIndex = uniqRules.indexOf(NONE);
 		// Remove "'none'" if there are other rules
-		if(noneIndex >= 0 && uniqRules.length > 1) {
+		if (noneIndex >= 0 && uniqRules.length > 1) {
 			uniqRules.splice(noneIndex, 1);
 		}
 
