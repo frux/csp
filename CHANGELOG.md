@@ -1,3 +1,15 @@
+## 6.2.0 (2025-10-08)
+
+### 🚀 Features
+
+- add nonce to res.locals as well / closes #12 ([#12](https://github.com/frux/csp/issues/12))
+- add support boolean in CSPListDirectiveValue ([074a8a9](https://github.com/frux/csp/commit/074a8a9))
+
+### ❤️  Thank You
+
+- Dmitry Los
+- Vladimir Kudinov
+
 ## 6.1.0 (2025-03-08)
 
 ### 🚀 Features
