@@ -79,6 +79,23 @@ app.use(expressCspHeader({
 // etc
 ```
 
+### Custom processing
+
+```js
+const { expressCspHeader, TLD } = require('express-csp-header');
+
+app.use(expressCspHeader({
+    directives: {
+        'default-src': ["#someString#"],
+        'script-src': ["#someOtherString#"],
+    },
+    processCspString: (cspString, req, res) => {
+        // here you can process final cspString
+        return cspString.replaceAll('#someString#', 'https://example.com').replaceAll('#someOtherString#', 'https://example2.com');
+    }
+}));
+```
+
 ## CSP violation report
 For more information read [csp-header documentation](https://github.com/frux/csp/tree/master/packages/csp-header#csp-violation-report). `express-csp-header` helps you manage both `Content-Security-Policy` and `Reporting-Endpoints` headers. [Report-to headers  is no longer recommended to use](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Report-To)
 

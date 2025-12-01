@@ -308,3 +308,19 @@ describe('Reporting-Endpoints', () => {
 		);
 	});
 });
+
+describe('processCspString', () => {
+	test('should process CSP string', () => {
+		const { res } = execMiddleware({
+			directives: {
+				'default-src': ["#someString#"],
+				'script-src': ["#someOtherString#"],
+			},
+			processCspString: (cspString, req, res) => {
+				return cspString.replaceAll('#someString#', 'https://example.com').replaceAll('#someOtherString#', 'https://example2.com');
+			}
+		});
+
+		expect(res.headers['Content-Security-Policy']).toStrictEqual("default-src https://example.com; script-src https://example2.com;");
+	});
+});

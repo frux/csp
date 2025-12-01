@@ -33,6 +33,7 @@ export interface ExpressCSPParams extends Omit<CSPHeaderParams, 'reportUri'> {
 	reportTo?: ReportTo[] | ReportToFunction,
 	reportUri?: string | ReportUriFunction,
 	reportingEndpoints?: ReportingEndpoint[] | ((req: Request, res: Response) => ReportingEndpoint[]),
+	processCspString?: (cspString: string, req: Request, res: Response) => string;
 }
 
 export function expressCspHeader(params?: ExpressCSPParams): RequestHandler {
@@ -46,6 +47,7 @@ export function expressCspHeader(params?: ExpressCSPParams): RequestHandler {
 		let cspString = getCspString(req, res, params);
 		cspString = applyNonce(req ,res, cspString);
 		cspString = applyAutoTld(req, cspString, domainOptions);
+		cspString = params.processCspString ? params.processCspString(cspString, req, res) : cspString;
 
 		res.set(params.reportOnly ? CSP_REPORT_ONLY_HEADER : CSP_HEADER, cspString);
 
