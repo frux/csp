@@ -82,7 +82,7 @@ app.use(expressCspHeader({
 ### Custom processing
 
 ```js
-const { expressCspHeader, TLD } = require('express-csp-header');
+const { expressCspHeader } = require('express-csp-header');
 
 app.use(expressCspHeader({
     directives: {
