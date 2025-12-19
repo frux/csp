@@ -1,3 +1,11 @@
+## 6.3.0 (2025-12-19)
+
+-   Added custom CSP string processing / ([#18](https://github.com/frux/csp/pull/18))
+
+### ❤️ Thank You
+
+-   Dmitrii Kanatnikov
+
 ## 6.2.1 (2025-11-28)
 
 ### 🚀 Patches
