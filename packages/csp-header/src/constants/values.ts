@@ -1,4 +1,5 @@
 export const ALLOW = "'allow'";
+export const ALLOW_DOWNLOADS = "allow-downloads";
 export const ALLOW_DOWNLOADS_WITHOUT_USER_ACTIVATION = "allow-downloads-without-user-activation";
 export const ALLOW_DUPLICATES = "'allow-duplicates'";
 export const ALLOW_FORMS = "allow-forms";

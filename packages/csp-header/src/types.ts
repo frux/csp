@@ -1,4 +1,5 @@
 import {
+	ALLOW_DOWNLOADS,
 	ALLOW_DOWNLOADS_WITHOUT_USER_ACTIVATION,
 	ALLOW_DUPLICATES,
 	ALLOW_FORMS,
@@ -134,6 +135,7 @@ export type CSPDirectives = {
 	"require-sri-for": ("script" | "style")[];
 	"require-trusted-types-for": typeof SCRIPT;
 	sandbox: (
+		| typeof ALLOW_DOWNLOADS
 		| typeof ALLOW_DOWNLOADS_WITHOUT_USER_ACTIVATION
 		| typeof ALLOW_FORMS
 		| typeof ALLOW_MODALS
