@@ -21,6 +21,8 @@ export const ALLOW_TOP_NAVIGATION_BY_USER_ACTIVATION = "allow-top-navigation-by-
 export const BLOB = 'blob:';
 export const BLOCK = "'block'";
 export const DATA = 'data:';
+export const HTTP = 'http:';
+export const HTTPS = 'https:';
 export const NO_REFERRER = "'no-referrer'";
 export const NONE = "'none'";
 export const NONE_WHEN_DOWNGRADE = "'none-when-downgrade'";
@@ -36,6 +38,8 @@ export const UNSAFE_HASHES = "'unsafe-hashes'";
 export const UNSAFE_INLINE = "'unsafe-inline'";
 export const UNSAFE_URL = "'unsafe-url'";
 export const WASM_UNSAFE_EVAL = "'wasm-unsafe-eval'";
+export const WS = 'ws:';
+export const WSS = 'wss:';
 
 // @deprecated Use UNSAFE_EVAL
 export const EVAL = "'unsafe-eval'";
