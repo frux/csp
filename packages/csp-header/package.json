@@ -2,11 +2,30 @@
   "name": "csp-header",
   "version": "6.3.1",
   "description": "Content-Security-Policy header generator",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/index.d.mts",
+        "default": "./dist/index.mjs"
+      },
+      "require": {
+        "types": "./dist/index.d.ts",
+        "default": "./dist/index.cjs"
+      },
+      "default": "./dist/index.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "test": "jest",
-    "build": "tsc -p ./",
+    "build": "tsup",
     "lint": "eslint"
   },
   "keywords": [

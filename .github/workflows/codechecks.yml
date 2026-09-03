@@ -11,4 +11,5 @@ jobs:
         with:
           node-version: 20
       - run: npm ci
-      - run: npx nx run-many -t test lint
+      - run: npm test
+      - run: npm run lint
