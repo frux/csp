@@ -6,7 +6,16 @@ import * as psl from 'psl';
 
 import { NONCE, TLD } from './constants';
 
+export * from 'csp-header';
 export * from './constants';
+
+declare global {
+	namespace Express {
+		interface Request {
+			nonce: string;
+		}
+	}
+}
 
 type ReportUriFunction = (req: Request, res: Response) => string;
 type ReportToFunction = (req: Request, res: Response) => ReportTo[];

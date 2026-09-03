@@ -7,6 +7,14 @@ Middleware wrapper for [csp-header](https://github.com/frux/csp/tree/master/pack
 
 ## Usage
 
+ES modules:
+
+```js
+import { expressCspHeader, INLINE, NONE, SELF } from 'express-csp-header';
+```
+
+CommonJS:
+
 ```js
 const { expressCspHeader, INLINE, NONE, SELF } = require('express-csp-header');
 

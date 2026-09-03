@@ -11,6 +11,15 @@ npm install --save csp-header
 ```
 
 ## Usage
+
+ES modules:
+
+```js
+import { getCSP, nonce, EVAL, INLINE, SELF } from 'csp-header';
+```
+
+CommonJS:
+
 ```js
 const { getCSP, nonce, EVAL, INLINE, SELF } = require('csp-header');
 
