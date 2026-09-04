@@ -1,3 +1,15 @@
+## 6.4.0 (2026-09-04)
+
+### 🚀 Features
+
+- Add native ESM and CommonJS builds ([#21](https://github.com/frux/csp/pull/21))
+- Add constants for HTTP(S) and WS(S) scheme sources ([#20](https://github.com/frux/csp/pull/20))
+
+### ❤️ Thank You
+
+- Kara Brightwell
+- Vladimir Kudinov
+
 ## 6.3.1 (2026-03-11)
 
 - Add allow-downloads to CSP sandbox directive type / ([#19](https://github.com/frux/csp/pull/19))
